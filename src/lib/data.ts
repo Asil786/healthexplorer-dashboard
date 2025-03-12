@@ -208,13 +208,13 @@ export const networkData = {
     { id: 8, name: "Riverside Community", type: "institution", connections: 2, dataProcessed: 93200 }
   ],
   links: [
-    { source: 1, target: 2, strength: 0.9, dataFlow: 8900 },
-    { source: 1, target: 3, strength: 0.85, dataFlow: 7600 },
-    { source: 1, target: 4, strength: 0.7, dataFlow: 5100 },
-    { source: 1, target: 5, strength: 0.88, dataFlow: 8500 },
-    { source: 1, target: 6, strength: 0.75, dataFlow: 6200 },
-    { source: 1, target: 7, strength: 0.8, dataFlow: 7100 },
-    { source: 1, target: 8, strength: 0.82, dataFlow: 7400 }
+    { source: 1, target: 2, strength: 0.9, dataFlow: 8900, value: 8900 },
+    { source: 1, target: 3, strength: 0.85, dataFlow: 7600, value: 7600 },
+    { source: 1, target: 4, strength: 0.7, dataFlow: 5100, value: 5100 },
+    { source: 1, target: 5, strength: 0.88, dataFlow: 8500, value: 8500 },
+    { source: 1, target: 6, strength: 0.75, dataFlow: 6200, value: 6200 },
+    { source: 1, target: 7, strength: 0.8, dataFlow: 7100, value: 7100 },
+    { source: 1, target: 8, strength: 0.82, dataFlow: 7400, value: 7400 }
   ]
 };
 
@@ -261,5 +261,171 @@ export const networkMetricsData = {
     { category: "Data Access", count: 8 },
     { category: "Encryption", count: 3 },
     { category: "Network", count: 5 }
+  ]
+};
+
+export const modelTrainingHistory = [
+  { date: "2023-09-01", accuracy: 0.75, loss: 0.35, privacyScore: 0.82 },
+  { date: "2023-09-08", accuracy: 0.79, loss: 0.30, privacyScore: 0.84 },
+  { date: "2023-09-15", accuracy: 0.83, loss: 0.25, privacyScore: 0.85 },
+  { date: "2023-09-22", accuracy: 0.86, loss: 0.22, privacyScore: 0.87 },
+  { date: "2023-09-29", accuracy: 0.89, loss: 0.19, privacyScore: 0.88 },
+  { date: "2023-10-06", accuracy: 0.91, loss: 0.17, privacyScore: 0.90 },
+  { date: "2023-10-13", accuracy: 0.92, loss: 0.15, privacyScore: 0.91 }
+];
+
+export const modelsData = [
+  {
+    id: 1,
+    name: "Pneumonia Detection",
+    version: "v2.3.1",
+    type: "CNN",
+    accuracy: 0.92,
+    lastTrained: "2023-10-13",
+    status: "deployed",
+    institutions: 6,
+    privacy: 0.91
+  },
+  {
+    id: 2,
+    name: "Diabetes Prediction",
+    version: "v1.5.2",
+    type: "Random Forest",
+    accuracy: 0.88,
+    lastTrained: "2023-10-10",
+    status: "deployed",
+    institutions: 8,
+    privacy: 0.86
+  },
+  {
+    id: 3,
+    name: "Heart Disease Risk",
+    version: "v1.2.0",
+    type: "Gradient Boosting",
+    accuracy: 0.85,
+    lastTrained: "2023-10-05",
+    status: "training",
+    institutions: 5,
+    privacy: 0.89
+  },
+  {
+    id: 4,
+    name: "Brain Tumor Segmentation",
+    version: "v0.9.1",
+    type: "U-Net",
+    accuracy: 0.83,
+    lastTrained: "2023-09-28",
+    status: "testing",
+    institutions: 4,
+    privacy: 0.92
+  },
+  {
+    id: 5,
+    name: "Skin Lesion Classifier",
+    version: "v1.1.0",
+    type: "EfficientNet",
+    accuracy: 0.90,
+    lastTrained: "2023-10-01",
+    status: "deployed",
+    institutions: 7,
+    privacy: 0.88
+  }
+];
+
+export const analyticsData = {
+  performanceMetrics: [
+    { date: "2023-09-15", accuracy: 0.82, precision: 0.84, recall: 0.80, f1Score: 0.82 },
+    { date: "2023-09-22", accuracy: 0.84, precision: 0.86, recall: 0.82, f1Score: 0.84 },
+    { date: "2023-09-29", accuracy: 0.86, precision: 0.88, recall: 0.84, f1Score: 0.86 },
+    { date: "2023-10-06", accuracy: 0.88, precision: 0.89, recall: 0.87, f1Score: 0.88 },
+    { date: "2023-10-13", accuracy: 0.91, precision: 0.92, recall: 0.90, f1Score: 0.91 }
+  ],
+  computationalResources: [
+    { date: "2023-09-15", gpuHours: 124, cpuHours: 246, memory: 58 },
+    { date: "2023-09-22", gpuHours: 138, cpuHours: 264, memory: 62 },
+    { date: "2023-09-29", gpuHours: 156, cpuHours: 285, memory: 67 },
+    { date: "2023-10-06", gpuHours: 172, cpuHours: 312, memory: 71 },
+    { date: "2023-10-13", gpuHours: 185, cpuHours: 334, memory: 76 }
+  ],
+  userActivity: [
+    { role: "Researchers", count: 42, activeUsers: 38, avgSessionTime: 68 },
+    { role: "Clinicians", count: 156, activeUsers: 124, avgSessionTime: 32 },
+    { role: "Data Scientists", count: 28, activeUsers: 26, avgSessionTime: 85 },
+    { role: "Administrators", count: 14, activeUsers: 12, avgSessionTime: 45 }
+  ],
+  institutionContributions: [
+    { name: "General Hospital", dataPoints: 125000, models: 4, accuracy: 0.92 },
+    { name: "University Medical", dataPoints: 89000, models: 3, accuracy: 0.89 },
+    { name: "Pacific Research", dataPoints: 113700, models: 5, accuracy: 0.94 },
+    { name: "Riverside Community", dataPoints: 93200, models: 3, accuracy: 0.90 },
+    { name: "Mountain View", dataPoints: 54600, models: 2, accuracy: 0.85 }
+  ]
+};
+
+export const privacyData = {
+  privacyScores: [
+    { date: "2023-08-15", score: 0.78, threshold: 0.75 },
+    { date: "2023-08-22", score: 0.79, threshold: 0.75 },
+    { date: "2023-08-29", score: 0.82, threshold: 0.75 },
+    { date: "2023-09-05", score: 0.84, threshold: 0.80 },
+    { date: "2023-09-12", score: 0.85, threshold: 0.80 },
+    { date: "2023-09-19", score: 0.87, threshold: 0.80 },
+    { date: "2023-09-26", score: 0.89, threshold: 0.85 },
+    { date: "2023-10-03", score: 0.90, threshold: 0.85 },
+    { date: "2023-10-10", score: 0.91, threshold: 0.85 }
+  ],
+  privacyAudits: [
+    { date: "2023-10-10", status: "passed", issues: 0, score: 0.91, auditor: "PrivacyShield Inc." },
+    { date: "2023-09-10", status: "passed", issues: 1, score: 0.87, auditor: "PrivacyShield Inc." },
+    { date: "2023-08-10", status: "warning", issues: 3, score: 0.81, auditor: "PrivacyShield Inc." },
+    { date: "2023-07-10", status: "warning", issues: 5, score: 0.76, auditor: "PrivacyShield Inc." },
+    { date: "2023-06-10", status: "failed", issues: 8, score: 0.72, auditor: "PrivacyShield Inc." }
+  ],
+  epsilonValues: [
+    { model: "Pneumonia Detection", epsilon: 0.5, date: "2023-10-13" },
+    { model: "Diabetes Prediction", epsilon: 0.8, date: "2023-10-10" },
+    { model: "Heart Disease Risk", epsilon: 0.6, date: "2023-10-05" },
+    { model: "Brain Tumor Segmentation", epsilon: 0.4, date: "2023-09-28" },
+    { model: "Skin Lesion Classifier", epsilon: 0.7, date: "2023-10-01" }
+  ],
+  complianceStatus: [
+    { regulation: "HIPAA", status: "compliant", lastVerified: "2023-10-05", score: 0.94 },
+    { regulation: "GDPR", status: "compliant", lastVerified: "2023-10-05", score: 0.92 },
+    { regulation: "CCPA", status: "compliant", lastVerified: "2023-10-05", score: 0.95 },
+    { regulation: "PIPEDA", status: "monitoring", lastVerified: "2023-09-22", score: 0.88 },
+    { regulation: "HITECH", status: "compliant", lastVerified: "2023-10-05", score: 0.93 }
+  ]
+};
+
+export const infrastructureData = {
+  serverStatus: [
+    { name: "Primary Federation Server", status: "operational", uptime: "99.98%", load: 42, region: "US-East" },
+    { name: "Backup Federation Server", status: "standby", uptime: "99.99%", load: 5, region: "US-West" },
+    { name: "European Data Center", status: "operational", uptime: "99.95%", load: 38, region: "EU-Central" },
+    { name: "Asian Data Center", status: "operational", uptime: "99.92%", load: 36, region: "APAC-East" },
+    { name: "Research Compute Cluster", status: "maintenance", uptime: "98.74%", load: 0, region: "US-Central" }
+  ],
+  resourceUtilization: [
+    { timestamp: "2023-10-15 09:00", cpu: 42, memory: 38, storage: 56, network: 32 },
+    { timestamp: "2023-10-15 10:00", cpu: 45, memory: 41, storage: 56, network: 38 },
+    { timestamp: "2023-10-15 11:00", cpu: 51, memory: 46, storage: 57, network: 45 },
+    { timestamp: "2023-10-15 12:00", cpu: 62, memory: 52, storage: 57, network: 58 },
+    { timestamp: "2023-10-15 13:00", cpu: 58, memory: 49, storage: 58, network: 52 },
+    { timestamp: "2023-10-15 14:00", cpu: 47, memory: 44, storage: 58, network: 41 },
+    { timestamp: "2023-10-15 15:00", cpu: 38, memory: 36, storage: 58, network: 34 }
+  ],
+  storageUsage: [
+    { category: "Model Weights", size: 1250, growth: 3.2 },
+    { category: "Training Data", size: 4500, growth: 5.8 },
+    { category: "Validation Data", size: 850, growth: 2.1 },
+    { category: "System Logs", size: 320, growth: 6.4 },
+    { category: "Backup Archives", size: 2800, growth: 1.9 }
+  ],
+  securityEvents: [
+    { date: "2023-10-14", type: "Authentication", severity: "low", count: 3, status: "resolved" },
+    { date: "2023-10-12", type: "Access Control", severity: "medium", count: 1, status: "resolved" },
+    { date: "2023-10-08", type: "Data Transfer", severity: "low", count: 2, status: "resolved" },
+    { date: "2023-10-01", type: "System Update", severity: "info", count: 4, status: "completed" },
+    { date: "2023-09-28", type: "Network Latency", severity: "medium", count: 1, status: "resolved" }
   ]
 };
