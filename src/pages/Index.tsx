@@ -12,7 +12,9 @@ import {
   Users, 
   Shield, 
   BrainCircuit, 
-  Activity 
+  Activity,
+  Building,
+  Database
 } from 'lucide-react';
 import { 
   institutions, 
@@ -46,7 +48,7 @@ const Index = () => {
           title="Participating Institutions"
           value={totalInstitutions}
           description={`${activeInstitutions} currently active`}
-          icon={<Hospital size={18} className="text-blue-500" />}
+          icon={<Building size={18} className="text-blue-500" />}
           variant="glass"
         />
         <StatCard

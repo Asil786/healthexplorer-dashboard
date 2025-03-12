@@ -6,22 +6,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Network, Server, Lock, Activity } from 'lucide-react';
 import * as d3 from 'd3';
 
-interface Node extends d3.SimulationNodeDatum {
+interface CustomNode extends d3.SimulationNodeDatum {
   id: number;
   name: string;
   type: string;
+  x?: number;
+  y?: number;
+  fx?: number | null;
+  fy?: number | null;
 }
 
-interface Link extends d3.SimulationLinkDatum<Node> {
-  source: number | Node;
-  target: number | Node;
+interface CustomLink extends d3.SimulationLinkDatum<CustomNode> {
+  source: number | CustomNode;
+  target: number | CustomNode;
   value: number;
 }
 
 interface NetworkGraphProps {
   data: {
-    nodes: Node[];
-    links: Link[];
+    nodes: CustomNode[];
+    links: CustomLink[];
   };
   className?: string;
 }
@@ -41,7 +45,7 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
     svg.selectAll("*").remove();
     
     // Create a simulation with several forces
-    const simulation = d3.forceSimulation(data.nodes as Node[])
+    const simulation = d3.forceSimulation(data.nodes as CustomNode[])
       .force("link", d3.forceLink(data.links).id((d: any) => d.id).distance(linkDistance))
       .force("charge", d3.forceManyBody().strength(-400))
       .force("center", layoutType === 'radial' 
@@ -64,7 +68,7 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
       .data(data.nodes)
       .join("g")
       .attr("class", "node")
-      .call(d3.drag<SVGGElement, Node>()
+      .call(d3.drag<SVGGElement, CustomNode>()
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended)
@@ -72,8 +76,8 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
       
     // Add circle for each node
     node.append("circle")
-      .attr("r", (d: Node) => d.type === 'server' ? 20 : 15)
-      .attr("fill", (d: Node) => d.type === 'server' ? "#3b82f6" : "#10b981")
+      .attr("r", (d: CustomNode) => d.type === 'server' ? 20 : 15)
+      .attr("fill", (d: CustomNode) => d.type === 'server' ? "#3b82f6" : "#10b981")
       .attr("stroke", "#fff")
       .attr("stroke-width", 2);
       
@@ -82,7 +86,7 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "central")
       .attr("fill", "#fff")
-      .text((d: Node) => d.type === 'server' ? "S" : "H");
+      .text((d: CustomNode) => d.type === 'server' ? "S" : "H");
       
     // Add label for each node
     node.append("text")
@@ -90,7 +94,7 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
       .attr("text-anchor", "middle")
       .attr("font-size", "10px")
       .attr("fill", "#64748b")
-      .text((d: Node) => d.name);
+      .text((d: CustomNode) => d.name);
       
     // Update positions on simulation tick
     simulation.on("tick", () => {
@@ -104,18 +108,18 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
     });
     
     // Drag functions
-    function dragstarted(event: any, d: Node) {
+    function dragstarted(event: any, d: CustomNode) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
       d.fy = d.y;
     }
     
-    function dragged(event: any, d: Node) {
+    function dragged(event: any, d: CustomNode) {
       d.fx = event.x;
       d.fy = event.y;
     }
     
-    function dragended(event: any, d: Node) {
+    function dragended(event: any, d: CustomNode) {
       if (!event.active) simulation.alphaTarget(0);
       d.fx = null;
       d.fy = null;
