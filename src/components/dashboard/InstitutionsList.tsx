@@ -5,7 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
-import { Hospital, Search, ArrowUpDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Hospital, Search, ArrowUpDown, Download, Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Institution {
@@ -22,9 +23,10 @@ interface Institution {
 interface InstitutionsListProps {
   institutions: Institution[];
   className?: string;
+  onSelectInstitution?: (id: number) => void;
 }
 
-const InstitutionsList = ({ institutions, className }: InstitutionsListProps) => {
+const InstitutionsList = ({ institutions, className, onSelectInstitution }: InstitutionsListProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<{
     column: keyof Institution | '';
@@ -89,15 +91,25 @@ const InstitutionsList = ({ institutions, className }: InstitutionsListProps) =>
               <CardDescription>Healthcare organizations in the federation</CardDescription>
             </div>
           </div>
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search institutions..."
-              className="w-full sm:w-[200px] pl-8"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <div className="flex flex-wrap gap-2">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search institutions..."
+                className="w-full sm:w-[200px] pl-8"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <Button variant="outline" size="sm">
+              <Filter size={16} className="mr-2" />
+              Filter
+            </Button>
+            <Button variant="outline" size="sm">
+              <Download size={16} className="mr-2" />
+              Export
+            </Button>
           </div>
         </div>
       </CardHeader>
@@ -153,7 +165,11 @@ const InstitutionsList = ({ institutions, className }: InstitutionsListProps) =>
                 </TableRow>
               ) : (
                 sortedData.map((institution) => (
-                  <TableRow key={institution.id} className="hover:bg-slate-50">
+                  <TableRow 
+                    key={institution.id} 
+                    className="hover:bg-slate-50 cursor-pointer"
+                    onClick={() => onSelectInstitution && onSelectInstitution(institution.id)}
+                  >
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8 bg-primary/10">
