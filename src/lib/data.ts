@@ -1,4 +1,3 @@
-
 export const institutionsData = [
   {
     id: 1,
@@ -86,67 +85,67 @@ export const institutionsData = [
 export const institutions = institutionsData;
 
 export const trainingProgress = [
-  { epoch: 1, accuracy: 0.68, loss: 0.42, timestamp: "2023-09-01" },
-  { epoch: 2, accuracy: 0.72, loss: 0.36, timestamp: "2023-09-02" },
-  { epoch: 3, accuracy: 0.75, loss: 0.31, timestamp: "2023-09-03" },
-  { epoch: 4, accuracy: 0.79, loss: 0.27, timestamp: "2023-09-04" },
-  { epoch: 5, accuracy: 0.82, loss: 0.24, timestamp: "2023-09-05" },
-  { epoch: 6, accuracy: 0.84, loss: 0.21, timestamp: "2023-09-06" },
-  { epoch: 7, accuracy: 0.86, loss: 0.19, timestamp: "2023-09-07" },
-  { epoch: 8, accuracy: 0.88, loss: 0.17, timestamp: "2023-09-08" },
-  { epoch: 9, accuracy: 0.89, loss: 0.15, timestamp: "2023-09-09" },
-  { epoch: 10, accuracy: 0.91, loss: 0.13, timestamp: "2023-09-10" }
+  { epoch: 1, accuracy: 0.68, loss: 0.42, privacyBudget: 0.8, timestamp: "2023-09-01" },
+  { epoch: 2, accuracy: 0.72, loss: 0.36, privacyBudget: 0.7, timestamp: "2023-09-02" },
+  { epoch: 3, accuracy: 0.75, loss: 0.31, privacyBudget: 0.65, timestamp: "2023-09-03" },
+  { epoch: 4, accuracy: 0.79, loss: 0.27, privacyBudget: 0.6, timestamp: "2023-09-04" },
+  { epoch: 5, accuracy: 0.82, loss: 0.24, privacyBudget: 0.55, timestamp: "2023-09-05" },
+  { epoch: 6, accuracy: 0.84, loss: 0.21, privacyBudget: 0.5, timestamp: "2023-09-06" },
+  { epoch: 7, accuracy: 0.86, loss: 0.19, privacyBudget: 0.45, timestamp: "2023-09-07" },
+  { epoch: 8, accuracy: 0.88, loss: 0.17, privacyBudget: 0.4, timestamp: "2023-09-08" },
+  { epoch: 9, accuracy: 0.89, loss: 0.15, privacyBudget: 0.35, timestamp: "2023-09-09" },
+  { epoch: 10, accuracy: 0.91, loss: 0.13, privacyBudget: 0.3, timestamp: "2023-09-10" }
 ];
 
 export const privacyMetrics = [
   { 
-    timestamp: "2023-09-01", 
-    differentialPrivacy: 0.82, 
-    encryptionLatency: 12, 
-    dataLeakageRisk: 0.08,
-    homomorphicOperations: 856 
+    date: "2023-09-01",
+    differentialPrivacy: 0.82,
+    informationLeakage: 0.18,
+    modelConfusion: 0.75,
+    membershipInference: 0.15
   },
   { 
-    timestamp: "2023-09-02", 
-    differentialPrivacy: 0.83, 
-    encryptionLatency: 11, 
-    dataLeakageRisk: 0.07,
-    homomorphicOperations: 892 
+    date: "2023-09-02",
+    differentialPrivacy: 0.83,
+    informationLeakage: 0.17,
+    modelConfusion: 0.77,
+    membershipInference: 0.14
   },
   { 
-    timestamp: "2023-09-03", 
-    differentialPrivacy: 0.84, 
-    encryptionLatency: 11, 
-    dataLeakageRisk: 0.07,
-    homomorphicOperations: 921 
+    date: "2023-09-03",
+    differentialPrivacy: 0.84,
+    informationLeakage: 0.16,
+    modelConfusion: 0.78,
+    membershipInference: 0.13
   },
   { 
-    timestamp: "2023-09-04", 
-    differentialPrivacy: 0.85, 
-    encryptionLatency: 10, 
-    dataLeakageRisk: 0.06,
-    homomorphicOperations: 945 
+    date: "2023-09-04",
+    differentialPrivacy: 0.85,
+    informationLeakage: 0.15,
+    modelConfusion: 0.80,
+    membershipInference: 0.12
   },
   { 
-    timestamp: "2023-09-05", 
-    differentialPrivacy: 0.86, 
-    encryptionLatency: 10, 
-    dataLeakageRisk: 0.06,
-    homomorphicOperations: 978 
+    date: "2023-09-05",
+    differentialPrivacy: 0.86,
+    informationLeakage: 0.14,
+    modelConfusion: 0.82,
+    membershipInference: 0.11
   },
   { 
-    timestamp: "2023-09-06", 
-    differentialPrivacy: 0.87, 
-    encryptionLatency: 9, 
-    dataLeakageRisk: 0.05,
-    homomorphicOperations: 1023 
+    date: "2023-09-06",
+    differentialPrivacy: 0.87,
+    informationLeakage: 0.13,
+    modelConfusion: 0.83,
+    membershipInference: 0.10
   },
   { 
-    timestamp: "2023-09-07", 
-    differentialPrivacy: 0.88, 
-    encryptionLatency: 9, 
-    dataLeakageRisk: 0.05,
-    homomorphicOperations: 1056 
+    date: "2023-09-07",
+    differentialPrivacy: 0.88,
+    informationLeakage: 0.12,
+    modelConfusion: 0.85,
+    membershipInference: 0.09
   }
 ];
 
@@ -182,11 +181,11 @@ export const modelComparison = [
 ];
 
 export const diagnosticMetrics = [
-  { name: "Lung Cancer", auc: 0.91, accuracy: 0.89, recall: 0.86, precision: 0.92 },
-  { name: "Pneumonia", auc: 0.94, accuracy: 0.92, recall: 0.91, precision: 0.93 },
-  { name: "Tuberculosis", auc: 0.88, accuracy: 0.87, recall: 0.82, precision: 0.89 },
-  { name: "COVID-19", auc: 0.93, accuracy: 0.91, recall: 0.90, precision: 0.92 },
-  { name: "Pleural Effusion", auc: 0.89, accuracy: 0.88, recall: 0.85, precision: 0.90 }
+  { name: "Lung Cancer", accuracy: 0.89, precision: 0.92, recall: 0.86, specificity: 0.93 },
+  { name: "Pneumonia", accuracy: 0.92, precision: 0.93, recall: 0.91, specificity: 0.94 },
+  { name: "Tuberculosis", accuracy: 0.87, precision: 0.89, recall: 0.82, specificity: 0.90 },
+  { name: "COVID-19", accuracy: 0.91, precision: 0.92, recall: 0.90, specificity: 0.93 },
+  { name: "Pleural Effusion", accuracy: 0.88, precision: 0.90, recall: 0.85, specificity: 0.91 }
 ];
 
 export const dataDistribution = [
@@ -199,31 +198,23 @@ export const dataDistribution = [
 
 export const networkData = {
   nodes: [
-    { id: "central", name: "Central Server", type: "server", connections: 8, dataProcessed: 350000 },
-    { id: "hospital1", name: "General Hospital", type: "institution", connections: 3, dataProcessed: 125000 },
-    { id: "hospital2", name: "University Medical", type: "institution", connections: 2, dataProcessed: 89000 },
-    { id: "hospital3", name: "Central Health", type: "institution", connections: 1, dataProcessed: 68400 },
-    { id: "hospital4", name: "Pacific Research", type: "institution", connections: 3, dataProcessed: 113700 },
-    { id: "hospital5", name: "Mountain View", type: "institution", connections: 2, dataProcessed: 54600 },
-    { id: "hospital6", name: "Atlantic Research", type: "institution", connections: 2, dataProcessed: 76300 },
-    { id: "hospital7", name: "Riverside Community", type: "institution", connections: 2, dataProcessed: 93200 },
-    { id: "hospital8", name: "Northern Medical", type: "institution", connections: 1, dataProcessed: 67800 }
+    { id: 1, name: "Central Server", type: "server", connections: 8, dataProcessed: 350000 },
+    { id: 2, name: "General Hospital", type: "institution", connections: 3, dataProcessed: 125000 },
+    { id: 3, name: "University Medical", type: "institution", connections: 2, dataProcessed: 89000 },
+    { id: 4, name: "Central Health", type: "institution", connections: 1, dataProcessed: 68400 },
+    { id: 5, name: "Pacific Research", type: "institution", connections: 3, dataProcessed: 113700 },
+    { id: 6, name: "Mountain View", type: "institution", connections: 2, dataProcessed: 54600 },
+    { id: 7, name: "Atlantic Research", type: "institution", connections: 2, dataProcessed: 76300 },
+    { id: 8, name: "Riverside Community", type: "institution", connections: 2, dataProcessed: 93200 }
   ],
   links: [
-    { source: "central", target: "hospital1", strength: 0.9, dataFlow: 8900 },
-    { source: "central", target: "hospital2", strength: 0.85, dataFlow: 7600 },
-    { source: "central", target: "hospital3", strength: 0.7, dataFlow: 5100 },
-    { source: "central", target: "hospital4", strength: 0.88, dataFlow: 8500 },
-    { source: "central", target: "hospital5", strength: 0.75, dataFlow: 6200 },
-    { source: "central", target: "hospital6", strength: 0.8, dataFlow: 7100 },
-    { source: "central", target: "hospital7", strength: 0.82, dataFlow: 7400 },
-    { source: "central", target: "hospital8", strength: 0.65, dataFlow: 4800 },
-    { source: "hospital1", target: "hospital2", strength: 0.6, dataFlow: 3200 },
-    { source: "hospital1", target: "hospital4", strength: 0.7, dataFlow: 4100 },
-    { source: "hospital2", target: "hospital7", strength: 0.55, dataFlow: 2800 },
-    { source: "hospital4", target: "hospital6", strength: 0.65, dataFlow: 3500 },
-    { source: "hospital5", target: "hospital6", strength: 0.5, dataFlow: 2200 },
-    { source: "hospital7", target: "hospital5", strength: 0.45, dataFlow: 1900 }
+    { source: 1, target: 2, strength: 0.9, dataFlow: 8900 },
+    { source: 1, target: 3, strength: 0.85, dataFlow: 7600 },
+    { source: 1, target: 4, strength: 0.7, dataFlow: 5100 },
+    { source: 1, target: 5, strength: 0.88, dataFlow: 8500 },
+    { source: 1, target: 6, strength: 0.75, dataFlow: 6200 },
+    { source: 1, target: 7, strength: 0.8, dataFlow: 7100 },
+    { source: 1, target: 8, strength: 0.82, dataFlow: 7400 }
   ]
 };
 
@@ -238,34 +229,34 @@ export const systemHealth = [
 ];
 
 export const networkMetricsData = {
-  bandwidthUsage: [
-    { time: "00:00", value: 32 },
-    { time: "04:00", value: 28 },
-    { time: "08:00", value: 65 },
-    { time: "12:00", value: 89 },
-    { time: "16:00", value: 75 },
-    { time: "20:00", value: 55 },
-    { time: "23:59", value: 40 }
-  ],
   packetLoss: [
-    { time: "00:00", value: 0.2 },
-    { time: "04:00", value: 0.1 },
-    { time: "08:00", value: 0.5 },
-    { time: "12:00", value: 0.8 },
-    { time: "16:00", value: 0.6 },
-    { time: "20:00", value: 0.4 },
-    { time: "23:59", value: 0.3 }
+    { timestamp: "00:00", value: 0.2 },
+    { timestamp: "04:00", value: 0.1 },
+    { timestamp: "08:00", value: 0.5 },
+    { timestamp: "12:00", value: 0.8 },
+    { timestamp: "16:00", value: 0.6 },
+    { timestamp: "20:00", value: 0.4 },
+    { timestamp: "23:59", value: 0.3 }
   ],
   latency: [
-    { time: "00:00", value: 12 },
-    { time: "04:00", value: 10 },
-    { time: "08:00", value: 18 },
-    { time: "12:00", value: 24 },
-    { time: "16:00", value: 20 },
-    { time: "20:00", value: 16 },
-    { time: "23:59", value: 14 }
+    { timestamp: "00:00", value: 12 },
+    { timestamp: "04:00", value: 10 },
+    { timestamp: "08:00", value: 18 },
+    { timestamp: "12:00", value: 24 },
+    { timestamp: "16:00", value: 20 },
+    { timestamp: "20:00", value: 16 },
+    { timestamp: "23:59", value: 14 }
   ],
-  securityEvents: [
+  bandwidth: [
+    { timestamp: "00:00", value: 32 },
+    { timestamp: "04:00", value: 28 },
+    { timestamp: "08:00", value: 65 },
+    { timestamp: "12:00", value: 89 },
+    { timestamp: "16:00", value: 75 },
+    { timestamp: "20:00", value: 55 },
+    { timestamp: "23:59", value: 40 }
+  ],
+  messageCount: [
     { category: "Authentication", count: 12 },
     { category: "Data Access", count: 8 },
     { category: "Encryption", count: 3 },
