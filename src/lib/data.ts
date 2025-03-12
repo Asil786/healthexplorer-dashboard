@@ -1,4 +1,3 @@
-
 // Sample data for healthcare federated learning dashboard
 
 // Institutions participating in the federated learning
@@ -278,4 +277,76 @@ export const systemHealth = [
   { timestamp: '14:00', cpuUsage: 69, memoryUsage: 58, networkLatency: 132 },
   { timestamp: '15:00', cpuUsage: 62, memoryUsage: 53, networkLatency: 128 },
   { timestamp: '16:00', cpuUsage: 56, memoryUsage: 49, networkLatency: 125 },
+];
+
+// Network metrics data
+export const networkMetricsData = {
+  packetLoss: [
+    { timestamp: '08:00', value: 0.2 },
+    { timestamp: '09:00', value: 0.1 },
+    { timestamp: '10:00', value: 0.3 },
+    { timestamp: '11:00', value: 0.4 },
+    { timestamp: '12:00', value: 0.2 },
+    { timestamp: '13:00', value: 0.1 },
+    { timestamp: '14:00', value: 0.0 },
+    { timestamp: '15:00', value: 0.3 },
+    { timestamp: '16:00', value: 0.2 },
+  ],
+  latency: [
+    { timestamp: '08:00', value: 120 },
+    { timestamp: '09:00', value: 125 },
+    { timestamp: '10:00', value: 130 },
+    { timestamp: '11:00', value: 135 },
+    { timestamp: '12:00', value: 140 },
+    { timestamp: '13:00', value: 138 },
+    { timestamp: '14:00', value: 132 },
+    { timestamp: '15:00', value: 128 },
+    { timestamp: '16:00', value: 125 },
+  ],
+  bandwidth: [
+    { timestamp: '08:00', value: 25 },
+    { timestamp: '09:00', value: 30 },
+    { timestamp: '10:00', value: 42 },
+    { timestamp: '11:00', value: 45 },
+    { timestamp: '12:00', value: 48 },
+    { timestamp: '13:00', value: 46 },
+    { timestamp: '14:00', value: 40 },
+    { timestamp: '15:00', value: 35 },
+    { timestamp: '16:00', value: 32 },
+  ],
+  messageCount: [
+    { category: 'Model Updates', count: 342 },
+    { category: 'Gradients', count: 156 },
+    { category: 'Parameters', count: 89 },
+    { category: 'Metadata', count: 210 },
+    { category: 'System', count: 43 },
+  ]
+};
+
+// Network event timeline data
+export const networkEvents = [
+  {
+    id: 1,
+    timestamp: '2023-10-15T14:30:25Z',
+    type: 'model_update',
+    institution: 'General Hospital',
+    status: 'success',
+    details: 'Model weights updated successfully, round 10 completed'
+  },
+  {
+    id: 2,
+    timestamp: '2023-10-15T14:25:18Z',
+    type: 'model_update',
+    institution: 'University Medical Center',
+    status: 'success',
+    details: 'Model weights updated successfully, round 10 completed'
+  },
+  {
+    id: 3,
+    timestamp: '2023-10-15T14:15:02Z',
+    type: 'error',
+    institution: 'Central Health Clinic',
+    status: 'error',
+    details: 'Connection timeout during model weight upload'
+  }
 ];
