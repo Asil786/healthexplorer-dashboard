@@ -46,6 +46,29 @@
   background: linear-gradient(135deg, #1a1f2c 0%, #2c3345 100%);
 }
 
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+.dark .recharts-text {
+  fill: rgba(255, 255, 255, 0.75);
+}
+
+.dark .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.dark .recharts-legend-item-text {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dark .recharts-active-dot {
+  fill: #3b82f6 !important;
+}
+
 /* Improved responsive styles */
 @media (max-width: 768px) {
   .recharts-responsive-container {
@@ -110,3 +133,24 @@
     justify-content: flex-start;
   }
 }
+
+/* Dark mode fixes for components */
+.dark .glass-card {
+  background: rgba(30, 41, 59, 0.5);
+  border-color: rgba(51, 65, 85, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark .card {
+  background-color: rgba(15, 23, 42, 0.7);
+  border-color: rgba(51, 65, 85, 0.5);
+}
+
+.dark .bg-white {
+  background-color: rgba(30, 41, 59, 0.7) !important;
+}
+
+.dark .text-muted-foreground {
+  color: rgba(203, 213, 225, 0.7);
+}
+

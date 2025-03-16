@@ -70,7 +70,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
       <DashboardHeader 
         title={title} 
         description={description} 
@@ -81,7 +81,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
         {/* Sidebar - Desktop */}
         <aside
           className={cn(
-            "fixed hidden md:flex h-[calc(100vh-4rem)] top-16 left-0 flex-col border-r bg-sidebar transition-all duration-300 z-30",
+            "fixed hidden md:flex h-[calc(100vh-4rem)] top-16 left-0 flex-col border-r bg-sidebar transition-all duration-300 z-30 dark:border-slate-800",
             isCollapsed ? "w-[70px]" : "w-64"
           )}
         >
@@ -120,7 +120,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
                 MANAGEMENT
               </div>
             )}
-            {isCollapsed && <div className="my-2 border-t border-sidebar-border" />}
+            {isCollapsed && <div className="my-2 border-t border-sidebar-border dark:border-slate-700" />}
             
             <NavItem 
               to="/privacy" 
@@ -168,7 +168,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
         {/* Sidebar - Mobile */}
         <aside
           className={cn(
-            "fixed md:hidden h-full inset-y-0 left-0 flex flex-col p-3 border-r bg-sidebar transition-transform duration-300 ease-in-out transform z-40",
+            "fixed md:hidden h-full inset-y-0 left-0 flex flex-col p-3 border-r bg-sidebar transition-transform duration-300 ease-in-out transform z-40 dark:border-slate-800",
             isMobileOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
@@ -243,7 +243,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
         {/* Mobile sidebar overlay */}
         {isMobileOpen && (
           <div
-            className="fixed inset-0 bg-black/20 z-30 md:hidden"
+            className="fixed inset-0 bg-black/20 dark:bg-black/50 z-30 md:hidden"
             onClick={toggleMobileSidebar}
           />
         )}
@@ -251,7 +251,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
         {/* Main content */}
         <main
           className={cn(
-            "flex-1 transition-all duration-300 bg-slate-50/40",
+            "flex-1 transition-all duration-300 bg-slate-50/40 dark:bg-slate-900/40",
             isCollapsed ? "md:ml-[70px]" : "md:ml-64"
           )}
         >

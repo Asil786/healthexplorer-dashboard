@@ -47,7 +47,7 @@ const Index = () => {
           title="Active Models"
           value="7"
           description="+2 from last month"
-          icon={<Brain className="h-4 w-4" />}
+          icon={<Brain className="h-4 w-4 text-blue-500 dark:text-blue-400" />}
           trend={{ value: 2, isPositive: true }}
           className="border-blue-100 dark:border-blue-900/30"
           valueClassName="text-blue-600 dark:text-blue-400"
@@ -56,7 +56,7 @@ const Index = () => {
           title="Active Nodes"
           value="28"
           description="+5 from last month"
-          icon={<Network className="h-4 w-4" />}
+          icon={<Network className="h-4 w-4 text-green-500 dark:text-green-400" />}
           trend={{ value: 5, isPositive: true }}
           className="border-green-100 dark:border-green-900/30"
           valueClassName="text-green-600 dark:text-green-400"
@@ -65,7 +65,7 @@ const Index = () => {
           title="Data Privacy Score"
           value="92%"
           description="+3% from last month"
-          icon={<Globe className="h-4 w-4" />}
+          icon={<Globe className="h-4 w-4 text-purple-500 dark:text-purple-400" />}
           trend={{ value: 3, isPositive: true }}
           className="border-purple-100 dark:border-purple-900/30"
           valueClassName="text-purple-600 dark:text-purple-400"
@@ -74,7 +74,7 @@ const Index = () => {
           title="Model Accuracy"
           value="89.7%"
           description="+1.2% from last month"
-          icon={<BarChart2 className="h-4 w-4" />}
+          icon={<BarChart2 className="h-4 w-4 text-amber-500 dark:text-amber-400" />}
           trend={{ value: 1.2, isPositive: true }}
           className="border-amber-100 dark:border-amber-900/30"
           valueClassName="text-amber-600 dark:text-amber-400"
@@ -85,7 +85,7 @@ const Index = () => {
         {/* Featured ML Predictions Card */}
         <Card className="bg-gradient-to-br from-blue-50/90 to-indigo-50/90 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-100 dark:border-blue-900/30 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-foreground">
               <Brain className="h-5 w-5 text-blue-500 dark:text-blue-400" />
               ML Prediction System
             </CardTitle>
@@ -137,7 +137,7 @@ const Index = () => {
       </div>
 
       <Tabs defaultValue="timeline" className="mb-4 md:mb-6">
-        <TabsList className="mb-4">
+        <TabsList className="mb-4 dark:bg-slate-800">
           <TabsTrigger value="timeline">Network Timeline</TabsTrigger>
           <TabsTrigger value="metrics">Network Metrics</TabsTrigger>
         </TabsList>

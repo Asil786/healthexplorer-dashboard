@@ -11,7 +11,7 @@ const Predictions = () => {
       description="Predict & visualize using machine learning models"
     >
       <div className="container mx-auto p-2 sm:p-4">
-        <Card className="border bg-card/60 backdrop-blur-sm">
+        <Card className="border bg-card/60 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-800/60">
           <CardContent className="p-0 sm:p-2 md:p-4">
             <MLPredictionSystem />
           </CardContent>
