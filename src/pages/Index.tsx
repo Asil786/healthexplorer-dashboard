@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Brain, BarChart2, Network, Globe, LineChart, ArrowRight } from 'lucide-react';
+import { trainingProgress, networkData, diagnosticMetrics, dataDistribution } from '@/lib/data';
 
 const Index = () => {
   // Mock data for network metrics
@@ -47,32 +48,36 @@ const Index = () => {
           value="7"
           description="+2 from last month"
           icon={<Brain className="h-4 w-4" />}
-          trend="up"
-          color="blue"
+          trend={{ value: 2, isPositive: true }}
+          className="border-blue-100"
+          valueClassName="text-blue-600"
         />
         <StatCard
           title="Active Nodes"
           value="28"
           description="+5 from last month"
           icon={<Network className="h-4 w-4" />}
-          trend="up"
-          color="green"
+          trend={{ value: 5, isPositive: true }}
+          className="border-green-100"
+          valueClassName="text-green-600"
         />
         <StatCard
           title="Data Privacy Score"
           value="92%"
           description="+3% from last month"
           icon={<Globe className="h-4 w-4" />}
-          trend="up"
-          color="purple"
+          trend={{ value: 3, isPositive: true }}
+          className="border-purple-100"
+          valueClassName="text-purple-600"
         />
         <StatCard
           title="Model Accuracy"
           value="89.7%"
           description="+1.2% from last month"
           icon={<BarChart2 className="h-4 w-4" />}
-          trend="up"
-          color="amber"
+          trend={{ value: 1.2, isPositive: true }}
+          className="border-amber-100"
+          valueClassName="text-amber-600"
         />
       </div>
 
@@ -126,9 +131,9 @@ const Index = () => {
       </div>
 
       <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-3 mb-6">
-        <ModelTrainingChart />
-        <NetworkTopology />
-        <PerformanceGrid />
+        <ModelTrainingChart data={trainingProgress} />
+        <NetworkTopology data={networkData} />
+        <PerformanceGrid diagnosticMetrics={diagnosticMetrics} dataDistribution={dataDistribution} />
       </div>
 
       <Tabs defaultValue="timeline" className="mb-6">
