@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import LiveHealth from "./pages/LiveHealth";
 import Index from "./pages/Index";
 import Analytics from "./pages/Analytics";
 import Models from "./pages/Models";
@@ -26,6 +27,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/livehealth" element={<LiveHealth />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/models" element={<Models />} />
             <Route path="/network" element={<Network />} />

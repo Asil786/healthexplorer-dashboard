@@ -15,6 +15,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  HeartPulse,
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -104,6 +105,13 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
               to="/network" 
               icon={<Network size={20} />} 
               title="Federation Network" 
+              isActive={location.pathname === '/network'} 
+              isCollapsed={isCollapsed}
+            />
+            <NavItem 
+              to="/livehealth" 
+              icon={<HeartPulse size={20} />} 
+              title="LiveHealth AI" 
               isActive={location.pathname === '/network'} 
               isCollapsed={isCollapsed}
             />
