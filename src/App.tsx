@@ -11,6 +11,7 @@ import Network from "./pages/Network";
 import Institutions from "./pages/Institutions";
 import Privacy from "./pages/Privacy";
 import Settings from "./pages/Settings";
+import Predictions from "./pages/Predictions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/institutions" element={<Institutions />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/predictions" element={<Predictions />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

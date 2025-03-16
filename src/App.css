@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Added responsive styles */
+@media (max-width: 768px) {
+  .recharts-responsive-container {
+    min-height: 300px;
+  }
+  
+  .recharts-wrapper {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .recharts-responsive-container {
+    min-height: 250px;
+  }
+}
