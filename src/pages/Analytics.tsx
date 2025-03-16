@@ -36,47 +36,51 @@ const Analytics = () => {
       title="Analytics Dashboard" 
       description="Model performance and training analytics"
     >
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-4">
-        <Card>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-4">
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Training Progress</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={analyticsData.performanceOverTime}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip 
-                  formatter={(value: number) => value.toFixed(2)}
-                />
-                <Area type="monotone" dataKey="accuracy" stroke="#8884d8" fill="#8884d8" />
-                <Area type="monotone" dataKey="loss" stroke="#82ca9d" fill="#82ca9d" />
-              </LineChart>
-            </ResponsiveContainer>
+            <div className="w-full h-[200px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={analyticsData.performanceOverTime}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip 
+                    formatter={(value: number) => value.toFixed(2)}
+                  />
+                  <Area type="monotone" dataKey="accuracy" stroke="#8884d8" fill="#8884d8" />
+                  <Area type="monotone" dataKey="loss" stroke="#82ca9d" fill="#82ca9d" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Weekly Training Activity</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={analyticsData.weeklyMetrics}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="training" fill="#8884d8" />
-                <Bar dataKey="validation" fill="#82ca9d" />
-                <Bar dataKey="test" fill="#ffc658" />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="w-full h-[200px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={analyticsData.weeklyMetrics}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="training" fill="#8884d8" />
+                  <Bar dataKey="validation" fill="#82ca9d" />
+                  <Bar dataKey="test" fill="#ffc658" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Model Comparison</CardTitle>
           </CardHeader>
@@ -84,7 +88,7 @@ const Analytics = () => {
             <div className="space-y-4">
               {analyticsData.modelMetrics.map((model) => (
                 <div key={model.name} className="space-y-2">
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <span className="font-medium">{model.name}</span>
                     <Badge variant="outline">
                       {model.accuracy}% Accuracy

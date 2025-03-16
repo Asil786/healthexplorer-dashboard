@@ -29,11 +29,11 @@ const Models = () => {
       title="Model Management" 
       description="Monitor and manage your machine learning models"
     >
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
         {modelData.models.map((model) => (
-          <Card key={model.id}>
+          <Card key={model.id} className="h-full">
             <CardHeader>
-              <div className="flex justify-between items-start">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                 <CardTitle className="text-lg">{model.name}</CardTitle>
                 <Badge 
                   variant={
@@ -41,6 +41,7 @@ const Models = () => {
                     model.status === 'training' ? 'default' :
                     'secondary'
                   }
+                  className="self-start"
                 >
                   {model.status}
                 </Badge>
@@ -53,7 +54,7 @@ const Models = () => {
                   <span>Progress: {model.progress}%</span>
                   <span>ETA: 2h 15m</span>
                 </div>
-                <div className="flex justify-between gap-2">
+                <div className="flex flex-col sm:flex-row justify-between gap-2">
                   {model.status === 'training' ? (
                     <Button variant="outline" size="sm" className="flex-1">
                       <Pause className="w-4 h-4 mr-2" />
@@ -87,18 +88,20 @@ const Models = () => {
           <CardTitle>Training Metrics</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={modelData.trainingProgress}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="epoch" />
-              <YAxis />
-              <Tooltip 
-                formatter={(value: number) => value.toFixed(3)}
-              />
-              <Line type="monotone" dataKey="accuracy" stroke="#8884d8" />
-              <Line type="monotone" dataKey="loss" stroke="#82ca9d" />
-            </LineChart>
-          </ResponsiveContainer>
+          <div className="w-full h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={modelData.trainingProgress}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="epoch" />
+                <YAxis />
+                <Tooltip 
+                  formatter={(value: number) => value.toFixed(3)}
+                />
+                <Line type="monotone" dataKey="accuracy" stroke="#8884d8" />
+                <Line type="monotone" dataKey="loss" stroke="#82ca9d" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </CardContent>
       </Card>
     </DashboardLayout>

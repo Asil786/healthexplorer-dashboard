@@ -30,8 +30,8 @@ const Privacy = () => {
       title="Privacy Controls" 
       description="Manage privacy settings and monitor metrics"
     >
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Card>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Differential Privacy</CardTitle>
           </CardHeader>
@@ -61,7 +61,7 @@ const Privacy = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Encryption Status</CardTitle>
           </CardHeader>
@@ -86,7 +86,7 @@ const Privacy = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="h-full">
           <CardHeader>
             <CardTitle>Privacy Metrics</CardTitle>
           </CardHeader>
@@ -110,16 +110,18 @@ const Privacy = () => {
           <CardTitle>Privacy Trends</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={privacyData.metrics}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="timestamp" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="privacy" stroke="#10b981" name="Privacy Score" />
-              <Line type="monotone" dataKey="risk" stroke="#ef4444" name="Risk Level" />
-            </LineChart>
-          </ResponsiveContainer>
+          <div className="w-full h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={privacyData.metrics}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="timestamp" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="privacy" stroke="#10b981" name="Privacy Score" />
+                <Line type="monotone" dataKey="risk" stroke="#ef4444" name="Risk Level" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </CardContent>
       </Card>
     </DashboardLayout>
