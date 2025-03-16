@@ -41,7 +41,12 @@
   color: #888;
 }
 
-/* Added responsive styles */
+/* Dark theme styles */
+.dark-theme-gradient {
+  background: linear-gradient(135deg, #1a1f2c 0%, #2c3345 100%);
+}
+
+/* Improved responsive styles */
 @media (max-width: 768px) {
   .recharts-responsive-container {
     min-height: 300px;
@@ -50,10 +55,58 @@
   .recharts-wrapper {
     font-size: 12px;
   }
+  
+  .recharts-legend-wrapper {
+    position: relative !important;
+    width: 100% !important;
+  }
+  
+  .recharts-default-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 !important;
+  }
+  
+  .grid-cols-2, 
+  .grid-cols-3, 
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {
   .recharts-responsive-container {
     min-height: 250px;
+  }
+  
+  .recharts-legend-item {
+    margin-right: 8px !important;
+  }
+  
+  .p-4 {
+    padding: 0.75rem;
+  }
+  
+  .gap-4 {
+    gap: 0.75rem;
+  }
+}
+
+/* Optimized card layouts for small screens */
+@media (max-width: 480px) {
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .card-actions {
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: flex-start;
   }
 }

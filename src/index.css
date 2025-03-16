@@ -48,13 +48,13 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222.2 47% 10%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 47% 11%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 47% 11%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 210 100% 50%;
@@ -112,15 +112,15 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white bg-opacity-70 backdrop-blur-md border border-white border-opacity-20 shadow-glass rounded-xl;
+    @apply bg-white bg-opacity-70 dark:bg-black dark:bg-opacity-30 backdrop-blur-md border border-white border-opacity-20 dark:border-white/10 shadow-glass dark:shadow-dark rounded-xl;
   }
   
   .glass-morphism {
-    @apply bg-white bg-opacity-30 backdrop-blur-lg border border-white border-opacity-20 shadow-glass;
+    @apply bg-white bg-opacity-30 dark:bg-black dark:bg-opacity-30 backdrop-blur-lg border border-white border-opacity-20 dark:border-white/10 shadow-glass dark:shadow-dark;
   }
   
   .neo-card {
-    @apply bg-white shadow-neo rounded-xl;
+    @apply bg-white dark:bg-gray-800 shadow-neo dark:shadow-dark rounded-xl;
   }
   
   .animated-gradient {
@@ -149,14 +149,14 @@
   }
   
   .chart-container {
-    @apply rounded-xl border border-slate-100 p-4 shadow-soft;
+    @apply rounded-xl border border-slate-100 dark:border-slate-800 p-4 shadow-soft dark:shadow-dark;
   }
 }
 
 /* For Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+  scrollbar-color: rgba(156, 163, 175, 0.5) rgba(0, 0, 0, 0.1);
 }
 
 /* For Chrome, Safari, and Opera */
@@ -172,6 +172,10 @@
 ::-webkit-scrollbar-thumb {
   background-color: rgba(156, 163, 175, 0.5);
   border-radius: 20px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.5);
 }
 
 /* Smooth page transitions */
@@ -195,4 +199,53 @@
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 300ms, transform 300ms;
+}
+
+/* Dark mode optimized recharts components */
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.1);
+}
+
+.dark .recharts-text {
+  fill: rgba(255, 255, 255, 0.75);
+}
+
+.dark .recharts-tooltip-wrapper .recharts-default-tooltip {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Responsive styles for charts and dashboards */
+@media (max-width: 768px) {
+  .recharts-responsive-container {
+    min-height: 300px;
+  }
+  
+  .recharts-wrapper {
+    font-size: 12px;
+  }
+  
+  .recharts-legend-wrapper {
+    position: relative !important;
+    width: 100% !important;
+  }
+  
+  .recharts-default-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .recharts-responsive-container {
+    min-height: 250px;
+  }
+  
+  .recharts-legend-item {
+    margin-right: 8px !important;
+  }
 }

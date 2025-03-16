@@ -42,15 +42,15 @@ const Index = () => {
       title="Federated Learning Dashboard"
       description="Monitor and manage your federated learning networks"
     >
-      <div className="grid gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-6">
+      <div className="grid gap-3 md:gap-4 lg:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-4 md:mb-6">
         <StatCard
           title="Active Models"
           value="7"
           description="+2 from last month"
           icon={<Brain className="h-4 w-4" />}
           trend={{ value: 2, isPositive: true }}
-          className="border-blue-100"
-          valueClassName="text-blue-600"
+          className="border-blue-100 dark:border-blue-900/30"
+          valueClassName="text-blue-600 dark:text-blue-400"
         />
         <StatCard
           title="Active Nodes"
@@ -58,8 +58,8 @@ const Index = () => {
           description="+5 from last month"
           icon={<Network className="h-4 w-4" />}
           trend={{ value: 5, isPositive: true }}
-          className="border-green-100"
-          valueClassName="text-green-600"
+          className="border-green-100 dark:border-green-900/30"
+          valueClassName="text-green-600 dark:text-green-400"
         />
         <StatCard
           title="Data Privacy Score"
@@ -67,8 +67,8 @@ const Index = () => {
           description="+3% from last month"
           icon={<Globe className="h-4 w-4" />}
           trend={{ value: 3, isPositive: true }}
-          className="border-purple-100"
-          valueClassName="text-purple-600"
+          className="border-purple-100 dark:border-purple-900/30"
+          valueClassName="text-purple-600 dark:text-purple-400"
         />
         <StatCard
           title="Model Accuracy"
@@ -76,30 +76,30 @@ const Index = () => {
           description="+1.2% from last month"
           icon={<BarChart2 className="h-4 w-4" />}
           trend={{ value: 1.2, isPositive: true }}
-          className="border-amber-100"
-          valueClassName="text-amber-600"
+          className="border-amber-100 dark:border-amber-900/30"
+          valueClassName="text-amber-600 dark:text-amber-400"
         />
       </div>
 
-      <div className="grid gap-4 md:gap-6 mb-6">
+      <div className="grid gap-3 md:gap-4 lg:gap-6 mb-4 md:mb-6">
         {/* Featured ML Predictions Card */}
-        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100">
+        <Card className="bg-gradient-to-br from-blue-50/90 to-indigo-50/90 dark:from-blue-950/30 dark:to-indigo-950/30 border-blue-100 dark:border-blue-900/30 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5 text-blue-500" />
+              <Brain className="h-5 w-5 text-blue-500 dark:text-blue-400" />
               ML Prediction System
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="dark:text-blue-300/80">
               Upload datasets, train models, and generate predictions with our advanced ML system
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col md:flex-row gap-6 items-center">
               <div className="space-y-2 flex-1">
-                <p className="text-sm text-slate-700">
+                <p className="text-sm text-slate-700 dark:text-slate-300">
                   Our new machine learning prediction system allows you to:
                 </p>
-                <ul className="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                <ul className="list-disc pl-5 text-sm text-slate-700 dark:text-slate-300 space-y-1">
                   <li>Upload and analyze custom datasets</li>
                   <li>Train multiple model types (KNN, Decision Trees, Random Forest, etc.)</li>
                   <li>Evaluate model performance with metrics like RMSE, MAE, R²</li>
@@ -115,14 +115,14 @@ const Index = () => {
                 </div>
               </div>
               <div className="relative flex-shrink-0">
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-blue-100 flex items-center justify-center">
-                  <LineChart className="h-16 w-16 text-blue-500" />
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                  <LineChart className="h-16 w-16 text-blue-500 dark:text-blue-400" />
                 </div>
-                <div className="absolute -top-2 -right-2 w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                  <BarChart2 className="h-6 w-6 text-green-500" />
+                <div className="absolute -top-2 -right-2 w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                  <BarChart2 className="h-6 w-6 text-green-500 dark:text-green-400" />
                 </div>
-                <div className="absolute -bottom-2 -left-2 w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
-                  <Network className="h-6 w-6 text-purple-500" />
+                <div className="absolute -bottom-2 -left-2 w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                  <Network className="h-6 w-6 text-purple-500 dark:text-purple-400" />
                 </div>
               </div>
             </div>
@@ -130,13 +130,13 @@ const Index = () => {
         </Card>
       </div>
 
-      <div className="grid gap-4 md:gap-6 grid-cols-1 lg:grid-cols-3 mb-6">
+      <div className="grid gap-3 md:gap-4 lg:gap-6 grid-cols-1 lg:grid-cols-3 mb-4 md:mb-6">
         <ModelTrainingChart data={trainingProgress} />
         <NetworkTopology data={networkData} />
         <PerformanceGrid diagnosticMetrics={diagnosticMetrics} dataDistribution={dataDistribution} />
       </div>
 
-      <Tabs defaultValue="timeline" className="mb-6">
+      <Tabs defaultValue="timeline" className="mb-4 md:mb-6">
         <TabsList className="mb-4">
           <TabsTrigger value="timeline">Network Timeline</TabsTrigger>
           <TabsTrigger value="metrics">Network Metrics</TabsTrigger>

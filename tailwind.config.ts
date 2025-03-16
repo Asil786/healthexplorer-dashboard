@@ -140,15 +140,17 @@ export default {
 			},
 			boxShadow: {
 				'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
-				'neo': '5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff',
-				'soft': '0 2px 15px rgba(0, 0, 0, 0.05)'
+				'neo': '5px 5px 10px #1a1a1a, -5px -5px 10px #2e2e2e',
+				'soft': '0 2px 15px rgba(0, 0, 0, 0.1)',
+				'dark': '0 2px 15px rgba(0, 0, 0, 0.3)'
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-				'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05))',
-				'soft-blue-gradient': 'linear-gradient(to right, #e0eafc, #cfdef3)',
-				'blue-purple-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+				'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
+				'dark-glass-gradient': 'linear-gradient(135deg, rgba(20, 20, 20, 0.5), rgba(10, 10, 10, 0.3))',
+				'soft-blue-gradient': 'linear-gradient(to right, #1a1f2c, #2c3345)',
+				'blue-purple-gradient': 'linear-gradient(135deg, #3a4a6b 0%, #5d4e8d 100%)',
 			}
 		}
 	},
