@@ -14,7 +14,7 @@ const Logo = ({ className, showText = true, size = 'md' }: LogoProps) => {
   const textSize = size === 'sm' ? 'text-sm' : size === 'md' ? 'text-base' : 'text-lg';
   
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("flex items-center gap-3", className)}>
       <div className="relative">
         <Network size={iconSize} className="text-indigo-500" />
         <div className="absolute inset-0 bg-indigo-500/20 blur-sm rounded-full animate-pulse-slow" />
@@ -25,7 +25,7 @@ const Logo = ({ className, showText = true, size = 'md' }: LogoProps) => {
           <span className={cn("font-bold tracking-tight leading-none", textSize)}>
             FedLearn
           </span>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground leading-tight">
             Federated Learning Platform
           </span>
         </div>

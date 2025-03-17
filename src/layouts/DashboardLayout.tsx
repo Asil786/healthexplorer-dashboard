@@ -33,7 +33,7 @@ const NavItem = ({ icon, title, to, isActive, isCollapsed }: NavItemProps) => {
       <Button
         variant="ghost"
         className={cn(
-          "w-full justify-start gap-x-3 my-1",
+          "w-full justify-start gap-x-4 my-1", // Increased gap-x from 3 to 4 for more space
           isActive
             ? "bg-sidebar-accent text-sidebar-accent-foreground dark:bg-indigo-900/50 dark:text-indigo-100"
             : "hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground dark:hover:bg-indigo-900/30 dark:hover:text-indigo-100",

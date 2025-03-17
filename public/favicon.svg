@@ -1,0 +1,12 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Network icon for federated learning -->
+  <circle cx="12" cy="5" r="3"></circle>
+  <line x1="12" y1="8" x2="12" y2="14"></line>
+  <circle cx="5" cy="19" r="3"></circle>
+  <line x1="5" y1="16" x2="8" y2="14"></line>
+  <circle cx="19" cy="19" r="3"></circle>
+  <line x1="19" y1="16" x2="16" y2="14"></line>
+  <!-- Central connection point -->
+  <circle cx="12" cy="14" r="2"></circle>
+</svg>
