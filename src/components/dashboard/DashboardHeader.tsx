@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
+import Logo from '@/components/ui/logo';
 
 interface DashboardHeaderProps {
   title: string;
@@ -38,6 +39,10 @@ const DashboardHeader = ({
         >
           <Menu className="h-5 w-5 text-foreground" />
         </Button>
+        
+        <Link to="/" className="mr-2">
+          <Logo size="sm" showText={true} />
+        </Link>
         
         <div className="flex flex-col">
           <h1 className="text-xl sm:text-2xl font-semibold tracking-tight animate-fade-in truncate text-foreground">

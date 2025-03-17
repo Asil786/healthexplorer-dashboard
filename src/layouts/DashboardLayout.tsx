@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { 
   LayoutDashboard, 
@@ -268,13 +270,14 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
         
         <main
           className={cn(
-            "flex-1 transition-all duration-300 bg-slate-50/40 dark:bg-slate-900/40",
+            "flex-1 transition-all duration-300 bg-slate-50/40 dark:bg-slate-900/40 flex flex-col",
             isCollapsed ? "md:ml-[70px]" : "md:ml-64"
           )}
         >
-          <div className="container py-6 px-4 sm:px-6 animate-fade-in">
+          <div className="container py-6 px-4 sm:px-6 animate-fade-in flex-1">
             {children}
           </div>
+          <Footer />
         </main>
       </div>
     </div>
