@@ -15,6 +15,7 @@ import Privacy from "./pages/Privacy";
 import Settings from "./pages/Settings";
 import Predictions from "./pages/Predictions";
 import NotFound from "./pages/NotFound";
+import Infrastructure from "./pages/Infrastructure"; // Added import
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/predictions" element={<Predictions />} />
+            <Route path="/infrastructure" element={<Infrastructure />} /> {/* Added route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

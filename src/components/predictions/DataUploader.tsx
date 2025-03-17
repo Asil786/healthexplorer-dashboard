@@ -14,6 +14,7 @@ interface DataUploaderProps {
 export const DataUploader = ({ onDatasetUploaded }: DataUploaderProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<any[] | null>(null);
+  const [fullData, setFullData] = useState<any[] | null>(null);
   const [columns, setColumns] = useState<string[]>([]);
   const [targetColumn, setTargetColumn] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -39,9 +40,9 @@ export const DataUploader = ({ onDatasetUploaded }: DataUploaderProps) => {
         const lines = csvData.split('\n');
         const headers = lines[0].split(',').map(header => header.trim());
         
-        // Get preview data (first 5 rows)
-        const previewData = [];
-        for (let i = 1; i < Math.min(lines.length, 6); i++) {
+        // Process all data rows
+        const allData = [];
+        for (let i = 1; i < lines.length; i++) {
           if (lines[i].trim() === '') continue;
           
           const values = lines[i].split(',').map(val => val.trim());
@@ -53,11 +54,16 @@ export const DataUploader = ({ onDatasetUploaded }: DataUploaderProps) => {
             row[header] = isNaN(Number(value)) ? value : Number(value);
           });
           
-          previewData.push(row);
+          allData.push(row);
         }
+        
+        // Get preview data (first 5 rows only for display)
+        const previewData = allData.slice(0, 5);
         
         setColumns(headers);
         setPreview(previewData);
+        setFullData(allData);
+        
         if (headers.length > 0) {
           setTargetColumn(headers[headers.length - 1]);
         }
@@ -77,18 +83,21 @@ export const DataUploader = ({ onDatasetUploaded }: DataUploaderProps) => {
   };
 
   const handleUpload = () => {
-    if (!file || !preview || !targetColumn) return;
+    if (!file || !fullData || !targetColumn) return;
     
-    // In a real app, we'd process the entire CSV here
-    // For now, we'll just use the preview data as our dataset
+    // Use the full dataset instead of just the preview
     const dataset: Dataset = {
-      data: preview,
+      data: fullData,
       columns: columns,
       targetColumn: targetColumn,
       filename: file.name
     };
     
     onDatasetUploaded(dataset);
+    toast({
+      title: "Dataset uploaded successfully",
+      description: `${dataset.filename} with ${dataset.data.length} rows and ${dataset.columns.length} columns`,
+    });
   };
 
   return (
@@ -180,13 +189,17 @@ export const DataUploader = ({ onDatasetUploaded }: DataUploaderProps) => {
                 </table>
               </div>
               
-              <Button 
-                className="mt-4 w-full" 
-                onClick={handleUpload}
-                disabled={!targetColumn}
-              >
-                Use Dataset
-              </Button>
+              <div className="mt-4 flex items-center justify-between">
+                <p className="text-sm text-muted-foreground">
+                  Showing preview ({preview.length} of {fullData?.length || 0} rows)
+                </p>
+                <Button 
+                  onClick={handleUpload}
+                  disabled={!targetColumn}
+                >
+                  Use Dataset
+                </Button>
+              </div>
             </CardContent>
           </Card>
         )}

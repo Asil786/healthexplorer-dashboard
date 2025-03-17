@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -34,8 +33,8 @@ const NavItem = ({ icon, title, to, isActive, isCollapsed }: NavItemProps) => {
         className={cn(
           "w-full justify-start gap-x-3 my-1",
           isActive
-            ? "bg-sidebar-accent text-sidebar-accent-foreground"
-            : "hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
+            ? "bg-sidebar-accent text-sidebar-accent-foreground dark:bg-indigo-900/50 dark:text-indigo-100"
+            : "hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground dark:hover:bg-indigo-900/30 dark:hover:text-indigo-100",
           isCollapsed && "justify-center px-2"
         )}
       >
@@ -57,7 +56,6 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   
-  // Close mobile sidebar when route changes
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location.pathname]);
@@ -78,11 +76,10 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
         onMenuToggle={toggleMobileSidebar}
       />
       
-      <div className="flex flex-1">
-        {/* Sidebar - Desktop */}
+      <div className="flex flex-1 pt-[60px] sm:pt-[72px]">
         <aside
           className={cn(
-            "fixed hidden md:flex h-[calc(100vh-4rem)] top-16 left-0 flex-col border-r bg-sidebar transition-all duration-300 z-30 dark:border-slate-800",
+            "fixed hidden md:flex h-[calc(100vh-4rem)] top-[60px] sm:top-[72px] left-0 flex-col border-r bg-sidebar transition-all duration-300 z-30 dark:bg-slate-900 dark:border-slate-800",
             isCollapsed ? "w-[70px]" : "w-64"
           )}
         >
@@ -111,8 +108,13 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
             <NavItem 
               to="/livehealth" 
               icon={<HeartPulse size={20} />} 
+<<<<<<< HEAD
               title="Live AI" 
               isActive={location.pathname === '/network'} 
+=======
+              title="LiveHealth AI" 
+              isActive={location.pathname === '/livehealth'} 
+>>>>>>> 827297c15c08a85820a0c226b015895dccd30d33
               isCollapsed={isCollapsed}
             />
             <NavItem 
@@ -124,7 +126,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
             />
             
             {!isCollapsed && (
-              <div className="mt-2 mb-2 text-xs font-medium text-sidebar-foreground/50 px-3">
+              <div className="mt-2 mb-2 text-xs font-medium text-sidebar-foreground/50 px-3 dark:text-slate-400">
                 MANAGEMENT
               </div>
             )}
@@ -166,21 +168,20 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="mt-4 mx-auto hover:bg-sidebar-accent/50"
+              className="mt-4 mx-auto hover:bg-sidebar-accent/50 dark:hover:bg-slate-800"
             >
               {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
             </Button>
           </div>
         </aside>
         
-        {/* Sidebar - Mobile */}
         <aside
           className={cn(
-            "fixed md:hidden h-full inset-y-0 left-0 flex flex-col p-3 border-r bg-sidebar transition-transform duration-300 ease-in-out transform z-40 dark:border-slate-800",
+            "fixed md:hidden h-full inset-y-0 left-0 flex flex-col p-3 border-r bg-sidebar transition-transform duration-300 ease-in-out transform z-40 dark:bg-slate-900 dark:border-slate-800",
             isMobileOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
-          <div className="flex flex-col space-y-1 mt-16">
+          <div className="flex flex-col space-y-1 mt-24">
             <NavItem 
               to="/" 
               icon={<LayoutDashboard size={20} />} 
@@ -205,9 +206,15 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
             <NavItem 
               to="/livehealth" 
               icon={<HeartPulse size={20} />} 
+<<<<<<< HEAD
               title="Live AI" 
               isActive={location.pathname === '/network'} 
               isCollapsed={isCollapsed}
+=======
+              title="LiveHealth AI" 
+              isActive={location.pathname === '/livehealth'} 
+              isCollapsed={false}
+>>>>>>> 827297c15c08a85820a0c226b015895dccd30d33
             />
             <NavItem 
               to="/models" 
@@ -217,7 +224,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
               isCollapsed={false}
             />
             
-            <div className="mt-2 mb-1 text-xs font-medium text-sidebar-foreground/50 px-3">
+            <div className="mt-2 mb-1 text-xs font-medium text-sidebar-foreground/50 px-3 dark:text-slate-400">
               MANAGEMENT
             </div>
             
@@ -255,7 +262,6 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
           </div>
         </aside>
         
-        {/* Mobile sidebar overlay */}
         {isMobileOpen && (
           <div
             className="fixed inset-0 bg-black/20 dark:bg-black/50 z-30 md:hidden"
@@ -263,7 +269,6 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
           />
         )}
         
-        {/* Main content */}
         <main
           className={cn(
             "flex-1 transition-all duration-300 bg-slate-50/40 dark:bg-slate-900/40",
