@@ -24,7 +24,10 @@ const DashboardHeader = ({
   const isDark = resolvedTheme === 'dark';
 
   return (
-    <header className={cn("w-full flex flex-col md:flex-row md:items-center justify-between border-b px-4 sm:px-6 py-3 sm:py-4 bg-background/80 backdrop-blur-sm sticky top-0 z-10 dark:border-slate-800", className)}>
+    <header className={cn(
+      "w-full flex flex-col md:flex-row md:items-center justify-between border-b px-4 sm:px-6 py-3 sm:py-4 bg-background/80 backdrop-blur-sm fixed top-0 z-50 dark:border-slate-800", 
+      className
+    )}>
       <div className="flex items-center space-x-3 sm:space-x-4">
         <Button 
           variant="ghost" 
