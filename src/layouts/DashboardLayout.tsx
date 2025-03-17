@@ -107,14 +107,11 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
             />
             <NavItem 
               to="/livehealth" 
-              icon={<HeartPulse size={20} />} 
-<<<<<<< HEAD
+              icon={<HeartPulse size={20} />}
               title="Live AI" 
               isActive={location.pathname === '/network'} 
-=======
               title="LiveHealth AI" 
               isActive={location.pathname === '/livehealth'} 
->>>>>>> 827297c15c08a85820a0c226b015895dccd30d33
               isCollapsed={isCollapsed}
             />
             <NavItem 
