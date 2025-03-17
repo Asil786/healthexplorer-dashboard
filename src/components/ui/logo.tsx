@@ -20,16 +20,6 @@ const Logo = ({ className, showText = true, size = 'md' }: LogoProps) => {
         <div className="absolute inset-0 bg-indigo-500/20 blur-sm rounded-full animate-pulse-slow" />
       </div>
       
-      {showText && (
-        <div className="flex flex-col">
-          <span className={cn("font-bold tracking-tight leading-none", textSize)}>
-            FedLearn
-          </span>
-          <span className="text-xs text-muted-foreground leading-tight">
-            Federated Learning Platform
-          </span>
-        </div>
-      )}
     </div>
   );
 };
