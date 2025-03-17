@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,9 +20,8 @@ import {
   RefreshCw,
   CircleDot
 } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, BarChart as RechartsBarChart, Bar, Legend } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, BarChart as RechartsBarChart, Bar, Legend, Cell } from 'recharts';
 
-// Mock data for infrastructure components
 const serverMetrics = [
   { timestamp: '00:00', cpu: 45, memory: 38, network: 20, disk: 15 },
   { timestamp: '01:00', cpu: 42, memory: 39, network: 22, disk: 15 },
