@@ -34,8 +34,8 @@ const NavItem = ({ icon, title, to, isActive, isCollapsed }: NavItemProps) => {
         className={cn(
           "w-full justify-start gap-x-3 my-1",
           isActive
-            ? "bg-sidebar-accent text-sidebar-accent-foreground"
-            : "hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
+            ? "bg-sidebar-accent text-sidebar-accent-foreground dark:bg-indigo-900/50 dark:text-indigo-100"
+            : "hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground dark:hover:bg-indigo-900/30 dark:hover:text-indigo-100",
           isCollapsed && "justify-center px-2"
         )}
       >
@@ -82,7 +82,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
         {/* Sidebar - Desktop */}
         <aside
           className={cn(
-            "fixed hidden md:flex h-[calc(100vh-4rem)] top-16 left-0 flex-col border-r bg-sidebar transition-all duration-300 z-30 dark:border-slate-800",
+            "fixed hidden md:flex h-[calc(100vh-4rem)] top-16 left-0 flex-col border-r bg-sidebar transition-all duration-300 z-30 dark:bg-slate-900 dark:border-slate-800",
             isCollapsed ? "w-[70px]" : "w-64"
           )}
         >
@@ -112,7 +112,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
               to="/livehealth" 
               icon={<HeartPulse size={20} />} 
               title="LiveHealth AI" 
-              isActive={location.pathname === '/network'} 
+              isActive={location.pathname === '/livehealth'} 
               isCollapsed={isCollapsed}
             />
             <NavItem 
@@ -124,7 +124,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
             />
             
             {!isCollapsed && (
-              <div className="mt-2 mb-2 text-xs font-medium text-sidebar-foreground/50 px-3">
+              <div className="mt-2 mb-2 text-xs font-medium text-sidebar-foreground/50 px-3 dark:text-slate-400">
                 MANAGEMENT
               </div>
             )}
@@ -166,7 +166,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="mt-4 mx-auto hover:bg-sidebar-accent/50"
+              className="mt-4 mx-auto hover:bg-sidebar-accent/50 dark:hover:bg-slate-800"
             >
               {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
             </Button>
@@ -176,7 +176,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
         {/* Sidebar - Mobile */}
         <aside
           className={cn(
-            "fixed md:hidden h-full inset-y-0 left-0 flex flex-col p-3 border-r bg-sidebar transition-transform duration-300 ease-in-out transform z-40 dark:border-slate-800",
+            "fixed md:hidden h-full inset-y-0 left-0 flex flex-col p-3 border-r bg-sidebar transition-transform duration-300 ease-in-out transform z-40 dark:bg-slate-900 dark:border-slate-800",
             isMobileOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
@@ -203,6 +203,13 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
               isCollapsed={false}
             />
             <NavItem 
+              to="/livehealth" 
+              icon={<HeartPulse size={20} />} 
+              title="LiveHealth AI" 
+              isActive={location.pathname === '/livehealth'} 
+              isCollapsed={false}
+            />
+            <NavItem 
               to="/models" 
               icon={<BrainCircuit size={20} />} 
               title="Models" 
@@ -210,7 +217,7 @@ const DashboardLayout = ({ children, title, description }: DashboardLayoutProps)
               isCollapsed={false}
             />
             
-            <div className="mt-2 mb-1 text-xs font-medium text-sidebar-foreground/50 px-3">
+            <div className="mt-2 mb-1 text-xs font-medium text-sidebar-foreground/50 px-3 dark:text-slate-400">
               MANAGEMENT
             </div>
             

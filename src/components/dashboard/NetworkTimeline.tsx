@@ -75,15 +75,15 @@ const NetworkTimeline = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'success':
-        return <CheckCircle2 size={16} className="text-green-500" />;
+        return <CheckCircle2 size={16} className="text-emerald-500" />;
       case 'error':
-        return <XCircle size={16} className="text-red-500" />;
+        return <XCircle size={16} className="text-rose-500" />;
       case 'warning':
         return <AlertTriangle size={16} className="text-amber-500" />;
       case 'info':
-        return <BrainCircuit size={16} className="text-blue-500" />;
+        return <BrainCircuit size={16} className="text-indigo-400" />;
       default:
-        return <Clock size={16} className="text-slate-500" />;
+        return <Clock size={16} className="text-slate-400" />;
     }
   };
 
@@ -93,7 +93,7 @@ const NetworkTimeline = () => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Clock size={18} className="text-primary" />
+              <Clock size={18} className="text-indigo-400" />
               Network Timeline
             </CardTitle>
             <CardDescription>Chronological events across the federated learning network</CardDescription>
@@ -113,16 +113,16 @@ const NetworkTimeline = () => {
       <CardContent>
         <div className="space-y-4">
           {timelineEvents.map((event) => (
-            <div key={event.id} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+            <div key={event.id} className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
               <div className="mt-0.5">
                 {getStatusIcon(event.status)}
               </div>
               <div className="flex-1">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                  <span className="font-medium">{event.institution}</span>
-                  <span className="text-xs text-slate-500">{event.timestamp}</span>
+                  <span className="font-medium text-slate-200">{event.institution}</span>
+                  <span className="text-xs text-slate-400">{event.timestamp}</span>
                 </div>
-                <p className="text-sm mt-1">{event.details}</p>
+                <p className="text-sm mt-1 text-slate-300">{event.details}</p>
               </div>
             </div>
           ))}

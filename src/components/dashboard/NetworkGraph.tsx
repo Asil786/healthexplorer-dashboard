@@ -55,7 +55,7 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
       
     // Create links
     const link = svg.append("g")
-      .attr("stroke", "#ccc")
+      .attr("stroke", "rgba(99, 102, 241, 0.4)")
       .attr("stroke-opacity", 0.6)
       .selectAll("line")
       .data(data.links)
@@ -77,8 +77,8 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
     // Add circle for each node
     node.append("circle")
       .attr("r", (d: CustomNode) => d.type === 'server' ? 20 : 15)
-      .attr("fill", (d: CustomNode) => d.type === 'server' ? "#3b82f6" : "#10b981")
-      .attr("stroke", "#fff")
+      .attr("fill", (d: CustomNode) => d.type === 'server' ? "#6366f1" : "#10b981")
+      .attr("stroke", "#1e293b")
       .attr("stroke-width", 2);
       
     // Add icon for each node
@@ -93,7 +93,7 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
       .attr("dy", 30)
       .attr("text-anchor", "middle")
       .attr("font-size", "10px")
-      .attr("fill", "#64748b")
+      .attr("fill", "#cbd5e1")
       .text((d: CustomNode) => d.name);
       
     // Update positions on simulation tick
@@ -140,7 +140,7 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <Network size={18} className="text-primary" />
+              <Network size={18} className="text-indigo-400" />
               Federation Network
             </CardTitle>
             <CardDescription>Visual representation of the federated learning network</CardDescription>
@@ -176,31 +176,31 @@ const NetworkGraph = ({ data, className }: NetworkGraphProps) => {
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="mt-4 h-[400px] w-full border rounded-md p-1 relative overflow-hidden bg-slate-50/50">
+        <div className="mt-4 h-[400px] w-full border rounded-md p-1 relative overflow-hidden bg-slate-900/50 dark:border-slate-700">
           <div className="absolute top-3 left-3 flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-xs bg-white/80 p-1 rounded shadow-sm">
-              <div className="w-3 h-3 rounded-full bg-[#3b82f6]"></div>
+            <div className="flex items-center gap-2 text-xs bg-slate-800/80 p-1 rounded shadow-sm text-slate-200">
+              <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
               <span>Central Server</span>
             </div>
-            <div className="flex items-center gap-2 text-xs bg-white/80 p-1 rounded shadow-sm">
-              <div className="w-3 h-3 rounded-full bg-[#10b981]"></div>
+            <div className="flex items-center gap-2 text-xs bg-slate-800/80 p-1 rounded shadow-sm text-slate-200">
+              <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
               <span>Hospital/Institution</span>
             </div>
           </div>
           <svg ref={svgRef} width="100%" height="100%"></svg>
         </div>
         <div className="mt-2 grid grid-cols-3 gap-2">
-          <div className="flex items-center justify-center p-2 rounded-md border border-slate-100 bg-slate-50">
-            <Server size={14} className="mr-2 text-slate-500" />
-            <span className="text-xs font-medium">1 Server</span>
+          <div className="flex items-center justify-center p-2 rounded-md border border-slate-700 bg-slate-800/50">
+            <Server size={14} className="mr-2 text-indigo-400" />
+            <span className="text-xs font-medium text-slate-200">1 Server</span>
           </div>
-          <div className="flex items-center justify-center p-2 rounded-md border border-slate-100 bg-slate-50">
-            <Activity size={14} className="mr-2 text-slate-500" />
-            <span className="text-xs font-medium">7 Institutions</span>
+          <div className="flex items-center justify-center p-2 rounded-md border border-slate-700 bg-slate-800/50">
+            <Activity size={14} className="mr-2 text-indigo-400" />
+            <span className="text-xs font-medium text-slate-200">7 Institutions</span>
           </div>
-          <div className="flex items-center justify-center p-2 rounded-md border border-slate-100 bg-slate-50">
-            <Lock size={14} className="mr-2 text-slate-500" />
-            <span className="text-xs font-medium">Secure Channels</span>
+          <div className="flex items-center justify-center p-2 rounded-md border border-slate-700 bg-slate-800/50">
+            <Lock size={14} className="mr-2 text-indigo-400" />
+            <span className="text-xs font-medium text-slate-200">Secure Channels</span>
           </div>
         </div>
       </CardContent>
