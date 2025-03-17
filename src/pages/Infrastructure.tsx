@@ -594,7 +594,7 @@ const InfrastructurePage = () => {
                 <Activity size={18} className="text-indigo-400" />
                 Network Performance
               </CardTitle>
-              <Car2dDescription>Latency and throughput metrics for the federation</CardDescription>
+              <CardDescription>Latency and throughput metrics for the federation</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-80 flex items-center justify-center text-slate-400">
