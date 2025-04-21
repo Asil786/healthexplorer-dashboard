@@ -1,3 +1,4 @@
+
 export const institutionsData = [
   {
     id: 1,
@@ -392,19 +393,6 @@ export const privacyData = {
   ]
 };
 
-export const infrastructureData = {
-  serverStatus: [
-    { name: "Federated Learning Local Server", status: "operational", uptime: "99.95%", load: 16, region: "India-Central" }
-  ],
-  resourceUtilization: [
-    { timestamp: "2023-10-15 09:00", cpu: 22, memory: 18, storage: 30, network: 8 },
-    { timestamp: "2023-10-15 12:00", cpu: 28, memory: 22, storage: 30, network: 10 }
-  ],
-  storageUsage: [
-    { category: "Model Weights", size: 120, growth: 2.1 },
-    { category: "Training Data", size: 780, growth: 3.2 }
-  ],
-  securityEvents: [
-    { date: "2023-10-14", type: "Authentication", severity: "low", count: 1, status: "resolved" }
-  ]
-};
+// Removed the duplicate infrastructureData declaration that was here
+// This resolves the TypeScript error about redeclaring block-scoped variable
+
