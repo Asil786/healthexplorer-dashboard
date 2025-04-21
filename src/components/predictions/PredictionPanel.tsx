@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ChevronRight, BarChart2, Database, LineChart } from 'lucide-react';
+import { ChevronRight, BarChart2, Database, LineChart, Calendar } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
 
 interface PredictionPanelProps {
   dataset: Dataset;
@@ -14,45 +15,103 @@ interface PredictionPanelProps {
   onPredict: (inputValues: Record<string, any>, modelType: string) => {
     predictedValue: number;
     confidence: number;
+    featureImportance?: Record<string, number>;
   };
 }
 
 export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelProps) => {
-  // Identify the main time-based feature or fallback to the first feature column (not target)
-  const timeFeature = dataset.columns.find(
+  const { toast } = useToast();
+  
+  // Identify time-based features
+  const timeFeatures = dataset.columns.filter(
     col =>
       col.toLowerCase().includes('year') ||
       col.toLowerCase().includes('date') ||
-      col.toLowerCase().includes('time')
+      col.toLowerCase().includes('time') ||
+      col.toLowerCase().includes('month') ||
+      col.toLowerCase().includes('day')
   );
-  // Only use the time-feature or fallback to the first feature column
-  const fallbackFeature = dataset.columns.find(col => col !== dataset.targetColumn);
-  const mainFeature = timeFeature || fallbackFeature;
-
+  
+  // Identify the main feature for prediction (time-based or fallback)
+  const nonTimeFeatures = dataset.columns.filter(
+    col => 
+      col !== dataset.targetColumn && 
+      !timeFeatures.includes(col)
+  ).slice(0, 3); // Limit to 3 additional features for simplicity
+  
+  // All features we'll use for prediction input
+  const predictionFeatures = [...timeFeatures, ...nonTimeFeatures].slice(0, 5);
+  
   const [selectedModel, setSelectedModel] = useState<string>(models[0]?.type || '');
-  const [featureValue, setFeatureValue] = useState<string>('');
+  const [featureValues, setFeatureValues] = useState<Record<string, string>>({});
   const [prediction, setPrediction] = useState<{
     value: number;
     confidence: number;
+    featureImportance?: Record<string, number>;
     detail?: string;
   } | null>(null);
 
+  const handleFeatureValueChange = (feature: string, value: string) => {
+    setFeatureValues(prev => ({
+      ...prev,
+      [feature]: value
+    }));
+  };
+
   const handlePredict = () => {
-    if (!mainFeature || !featureValue) return;
+    if (predictionFeatures.length === 0) {
+      toast({
+        title: "Prediction Error",
+        description: "No features available for prediction",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Convert input values to appropriate types
     const inputObj: Record<string, any> = {};
-    inputObj[mainFeature] = isNaN(Number(featureValue)) ? featureValue : Number(featureValue);
+    
+    predictionFeatures.forEach(feature => {
+      const value = featureValues[feature];
+      if (value !== undefined && value !== '') {
+        // Convert to number if possible
+        inputObj[feature] = isNaN(Number(value)) ? value : Number(value);
+      }
+    });
+    
+    // Check if we have at least one feature value
+    if (Object.keys(inputObj).length === 0) {
+      toast({
+        title: "Missing Input",
+        description: "Please provide at least one feature value for prediction",
+        variant: "destructive"
+      });
+      return;
+    }
 
     let detail = '';
     if (dataset.targetColumn) {
-      detail = timeFeature
-        ? `Predicted ${dataset.targetColumn} for ${mainFeature} "${featureValue}"`
-        : `Predicted ${dataset.targetColumn} for ${mainFeature} "${featureValue}"`;
+      const mainFeature = Object.keys(inputObj)[0] || '';
+      detail = mainFeature ? 
+        `Predicted ${dataset.targetColumn} for ${mainFeature} "${featureValues[mainFeature]}"` :
+        `Predicted ${dataset.targetColumn}`;
+      
+      if (Object.keys(inputObj).length > 1) {
+        detail += " with multiple features";
+      }
     }
+    
     const result = onPredict(inputObj, selectedModel);
     setPrediction({
       value: result.predictedValue,
       confidence: result.confidence,
+      featureImportance: result.featureImportance,
       detail,
+    });
+    
+    toast({
+      title: "Prediction Generated",
+      description: `${selectedModel} model prediction complete`,
     });
   };
 
@@ -79,25 +138,68 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
                 </SelectContent>
               </Select>
             </div>
-            {/* Only the main relevant feature */}
-            {mainFeature && (
-              <div className="space-y-2 pt-2">
-                <Label htmlFor={`input-${mainFeature}`}>
-                  {mainFeature}
-                </Label>
-                <Input
-                  id={`input-${mainFeature}`}
-                  placeholder={`Enter ${mainFeature}`}
-                  value={featureValue}
-                  onChange={e => setFeatureValue(e.target.value)}
-                />
+            
+            {/* Feature inputs */}
+            <div className="pt-2">
+              <h3 className="text-sm font-medium mb-2 flex items-center">
+                <Calendar className="mr-1 h-4 w-4" />
+                Time Features & Parameters
+              </h3>
+              <div className="space-y-3">
+                {timeFeatures.map(feature => (
+                  <div key={feature} className="space-y-1">
+                    <Label htmlFor={`input-${feature}`}>
+                      {feature}
+                    </Label>
+                    <Input
+                      id={`input-${feature}`}
+                      placeholder={`Enter ${feature}`}
+                      value={featureValues[feature] || ''}
+                      onChange={e => handleFeatureValueChange(feature, e.target.value)}
+                    />
+                  </div>
+                ))}
+                
+                {timeFeatures.length === 0 && (
+                  <p className="text-sm text-muted-foreground italic">
+                    No time-based features detected in dataset
+                  </p>
+                )}
               </div>
-            )}
+            </div>
+            
+            <div className="pt-2">
+              <h3 className="text-sm font-medium mb-2 flex items-center">
+                <Database className="mr-1 h-4 w-4" />
+                Other Features
+              </h3>
+              <div className="space-y-3">
+                {nonTimeFeatures.slice(0, 3).map(feature => (
+                  <div key={feature} className="space-y-1">
+                    <Label htmlFor={`input-${feature}`}>
+                      {feature}
+                    </Label>
+                    <Input
+                      id={`input-${feature}`}
+                      placeholder={`Enter ${feature}`}
+                      value={featureValues[feature] || ''}
+                      onChange={e => handleFeatureValueChange(feature, e.target.value)}
+                    />
+                  </div>
+                ))}
+                
+                {nonTimeFeatures.length === 0 && (
+                  <p className="text-sm text-muted-foreground italic">
+                    No additional features available
+                  </p>
+                )}
+              </div>
+            </div>
 
             <Button
               onClick={handlePredict}
               className="w-full mt-4"
-              disabled={!featureValue || !mainFeature}
+              disabled={Object.keys(featureValues).length === 0}
             >
               Predict <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -143,19 +245,46 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
                 
                 <div className="flex flex-col items-center p-4 border rounded-lg">
                   <LineChart className="h-8 w-8 text-purple-500 mb-2" />
-                  <div className="text-sm font-medium">Features</div>
+                  <div className="text-sm font-medium">Features Used</div>
                   <div className="text-lg font-bold">
-                    {/* Only show usable features count */}
-                    {mainFeature ? 1 : 0}
+                    {Object.keys(featureValues).filter(k => featureValues[k] !== '').length}
                   </div>
                 </div>
               </div>
+              
+              {/* Feature Importance */}
+              {prediction.featureImportance && (
+                <div className="bg-muted/30 p-4 rounded-lg">
+                  <h4 className="text-sm font-medium mb-2">Feature Importance</h4>
+                  <div className="space-y-2">
+                    {Object.entries(prediction.featureImportance)
+                      .sort((a, b) => b[1] - a[1])
+                      .slice(0, 5)
+                      .map(([feature, importance]) => (
+                        <div key={feature} className="flex items-center">
+                          <div className="text-xs w-24 truncate">{feature}</div>
+                          <div className="flex-1 mx-2">
+                            <div className="h-2 bg-muted rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-primary" 
+                                style={{ width: `${Math.max(importance * 100, 5)}%` }} 
+                              />
+                            </div>
+                          </div>
+                          <div className="text-xs font-medium w-12 text-right">
+                            {(importance * 100).toFixed(1)}%
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
               
               <div className="bg-muted/30 p-4 rounded-lg">
                 <h4 className="text-sm font-medium mb-2">About this prediction</h4>
                 <p className="text-sm text-muted-foreground">
                   This prediction was made using the {models.find(m => m.type === selectedModel)?.name} model.
-                  The confidence score indicates the model's certainty in this prediction.
+                  The confidence score indicates the model's certainty in this prediction based on time series analysis and feature engineering.
                 </p>
               </div>
             </div>
@@ -164,7 +293,8 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
               <LineChart className="h-16 w-16 mb-4 text-muted" />
               <h3 className="text-lg font-medium mb-2">No Prediction Yet</h3>
               <p className="max-w-md">
-                Enter the {mainFeature} and click Predict to see the result.
+                Enter feature values and click Predict to see the result.
+                Including time-based features will improve accuracy.
               </p>
             </div>
           )}

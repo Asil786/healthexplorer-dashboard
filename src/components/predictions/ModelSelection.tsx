@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Grid, LineChart, BrainCircuit, GitFork, ArrowUpRight } from 'lucide-react';
+import { Grid, LineChart, BrainCircuit, GitFork, ArrowUpRight, Clock, BarChart4 } from 'lucide-react';
 
 interface ModelSelectionProps {
   dataset: Dataset;
@@ -15,12 +15,26 @@ interface ModelSelectionProps {
 }
 
 export const ModelSelection = ({ dataset, onModelsConfigured, loading }: ModelSelectionProps) => {
+  // Check if dataset has time features
+  const hasTimeFeatures = dataset.columns.some(col => 
+    col.toLowerCase().includes('year') ||
+    col.toLowerCase().includes('date') ||
+    col.toLowerCase().includes('time') ||
+    col.toLowerCase().includes('month') ||
+    col.toLowerCase().includes('day')
+  );
+
+  // Define available models
   const [selectedModels, setSelectedModels] = useState<Record<string, boolean>>({
     knn: true,
     decision_tree: true,
     random_forest: true,
     xgboost: false,
     linear_regression: true,
+    // Time series models
+    lstm: hasTimeFeatures,
+    arima: hasTimeFeatures,
+    prophet: false,
   });
   
   const [hyperparameters, setHyperparameters] = useState({
@@ -29,6 +43,10 @@ export const ModelSelection = ({ dataset, onModelsConfigured, loading }: ModelSe
     random_forest: { n_estimators: 100, max_depth: 10 },
     xgboost: { n_estimators: 100, learning_rate: 0.1 },
     linear_regression: {},
+    // Time series hyperparameters
+    lstm: { units: 64, epochs: 100, batch_size: 32 },
+    arima: { p: 2, d: 1, q: 2 },
+    prophet: { seasonality_mode: 'multiplicative', changepoint_prior_scale: 0.05 },
   });
 
   const handleModelToggle = (modelName: string, checked: boolean) => {
@@ -55,6 +73,7 @@ export const ModelSelection = ({ dataset, onModelsConfigured, loading }: ModelSe
   const handleTrainModels = () => {
     const models: ModelConfig[] = [];
     
+    // Traditional models
     if (selectedModels.knn) {
       models.push({
         name: 'K-Nearest Neighbors',
@@ -95,12 +114,38 @@ export const ModelSelection = ({ dataset, onModelsConfigured, loading }: ModelSe
       });
     }
     
+    // Time series models
+    if (selectedModels.lstm) {
+      models.push({
+        name: 'LSTM Neural Network',
+        type: 'lstm',
+        hyperparameters: hyperparameters.lstm,
+      });
+    }
+    
+    if (selectedModels.arima) {
+      models.push({
+        name: 'ARIMA',
+        type: 'arima',
+        hyperparameters: hyperparameters.arima,
+      });
+    }
+    
+    if (selectedModels.prophet) {
+      models.push({
+        name: 'Prophet',
+        type: 'prophet',
+        hyperparameters: hyperparameters.prophet,
+      });
+    }
+    
     onModelsConfigured(models);
   };
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        {/* Standard ML Models */}
         <Card className="col-span-1">
           <CardContent className="pt-6">
             <div className="flex items-center space-x-3">
@@ -238,6 +283,32 @@ export const ModelSelection = ({ dataset, onModelsConfigured, loading }: ModelSe
         <Card className="col-span-1">
           <CardContent className="pt-6">
             <div className="flex items-center space-x-3">
+              <ArrowUpRight className="w-8 h-8 text-red-500" />
+              <div>
+                <h3 className="font-medium">Linear Regression</h3>
+                <p className="text-sm text-muted-foreground">Simple linear model</p>
+              </div>
+            </div>
+            
+            <div className="mt-4 space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="lr-select" 
+                  checked={selectedModels.linear_regression}
+                  onCheckedChange={(checked) => 
+                    handleModelToggle('linear_regression', checked as boolean)
+                  }
+                />
+                <Label htmlFor="lr-select">Use this model</Label>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Advanced Time Series Models */}
+        <Card className="col-span-1">
+          <CardContent className="pt-6">
+            <div className="flex items-center space-x-3">
               <BrainCircuit className="w-8 h-8 text-yellow-500" />
               <div>
                 <h3 className="font-medium">XGBoost</h3>
@@ -288,30 +359,181 @@ export const ModelSelection = ({ dataset, onModelsConfigured, loading }: ModelSe
           </CardContent>
         </Card>
         
-        <Card className="col-span-1">
-          <CardContent className="pt-6">
-            <div className="flex items-center space-x-3">
-              <ArrowUpRight className="w-8 h-8 text-red-500" />
-              <div>
-                <h3 className="font-medium">Linear Regression</h3>
-                <p className="text-sm text-muted-foreground">Simple linear model</p>
-              </div>
-            </div>
+        {/* Time Series Models - Only show if dataset has time features */}
+        {hasTimeFeatures && (
+          <>
+            <Card className={`col-span-1 ${!hasTimeFeatures ? 'opacity-50' : ''}`}>
+              <CardContent className="pt-6">
+                <div className="flex items-center space-x-3">
+                  <BrainCircuit className="w-8 h-8 text-blue-600" />
+                  <div>
+                    <h3 className="font-medium">LSTM Neural Network</h3>
+                    <p className="text-sm text-muted-foreground">Deep learning for time series</p>
+                  </div>
+                </div>
+                
+                <div className="mt-4 space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="lstm-select" 
+                      checked={selectedModels.lstm}
+                      onCheckedChange={(checked) => 
+                        handleModelToggle('lstm', checked as boolean)
+                      }
+                      disabled={!hasTimeFeatures}
+                    />
+                    <Label htmlFor="lstm-select">Use this model</Label>
+                  </div>
+                  
+                  {selectedModels.lstm && (
+                    <div className="space-y-2 pl-6 pt-2">
+                      <div>
+                        <Label htmlFor="lstm-units">LSTM Units</Label>
+                        <Input 
+                          id="lstm-units"
+                          type="number" 
+                          value={hyperparameters.lstm.units} 
+                          onChange={(e) => handleHyperparamChange('lstm', 'units', e.target.value)}
+                          min={16}
+                          max={256}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="lstm-epochs">Epochs</Label>
+                        <Input 
+                          id="lstm-epochs"
+                          type="number" 
+                          value={hyperparameters.lstm.epochs} 
+                          onChange={(e) => handleHyperparamChange('lstm', 'epochs', e.target.value)}
+                          min={10}
+                          max={500}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
             
-            <div className="mt-4 space-y-3">
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="lr-select" 
-                  checked={selectedModels.linear_regression}
-                  onCheckedChange={(checked) => 
-                    handleModelToggle('linear_regression', checked as boolean)
-                  }
-                />
-                <Label htmlFor="lr-select">Use this model</Label>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            <Card className={`col-span-1 ${!hasTimeFeatures ? 'opacity-50' : ''}`}>
+              <CardContent className="pt-6">
+                <div className="flex items-center space-x-3">
+                  <Clock className="w-8 h-8 text-indigo-500" />
+                  <div>
+                    <h3 className="font-medium">ARIMA</h3>
+                    <p className="text-sm text-muted-foreground">Statistical time series forecasting</p>
+                  </div>
+                </div>
+                
+                <div className="mt-4 space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="arima-select" 
+                      checked={selectedModels.arima}
+                      onCheckedChange={(checked) => 
+                        handleModelToggle('arima', checked as boolean)
+                      }
+                      disabled={!hasTimeFeatures}
+                    />
+                    <Label htmlFor="arima-select">Use this model</Label>
+                  </div>
+                  
+                  {selectedModels.arima && (
+                    <div className="space-y-2 pl-6 pt-2">
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <Label htmlFor="arima-p">p (AR)</Label>
+                          <Input 
+                            id="arima-p"
+                            type="number" 
+                            value={hyperparameters.arima.p} 
+                            onChange={(e) => handleHyperparamChange('arima', 'p', e.target.value)}
+                            min={0}
+                            max={10}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="arima-d">d (I)</Label>
+                          <Input 
+                            id="arima-d"
+                            type="number" 
+                            value={hyperparameters.arima.d} 
+                            onChange={(e) => handleHyperparamChange('arima', 'd', e.target.value)}
+                            min={0}
+                            max={2}
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="arima-q">q (MA)</Label>
+                          <Input 
+                            id="arima-q"
+                            type="number" 
+                            value={hyperparameters.arima.q} 
+                            onChange={(e) => handleHyperparamChange('arima', 'q', e.target.value)}
+                            min={0}
+                            max={10}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className={`col-span-1 ${!hasTimeFeatures ? 'opacity-50' : ''}`}>
+              <CardContent className="pt-6">
+                <div className="flex items-center space-x-3">
+                  <BarChart4 className="w-8 h-8 text-teal-500" />
+                  <div>
+                    <h3 className="font-medium">Prophet</h3>
+                    <p className="text-sm text-muted-foreground">Facebook's forecasting tool</p>
+                  </div>
+                </div>
+                
+                <div className="mt-4 space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="prophet-select" 
+                      checked={selectedModels.prophet}
+                      onCheckedChange={(checked) => 
+                        handleModelToggle('prophet', checked as boolean)
+                      }
+                      disabled={!hasTimeFeatures}
+                    />
+                    <Label htmlFor="prophet-select">Use this model</Label>
+                  </div>
+                  
+                  {selectedModels.prophet && (
+                    <div className="space-y-2 pl-6 pt-2">
+                      <div>
+                        <Label htmlFor="prophet-seasonality">Seasonality Mode</Label>
+                        <Input 
+                          id="prophet-seasonality"
+                          type="text" 
+                          value={hyperparameters.prophet.seasonality_mode as string} 
+                          onChange={(e) => handleHyperparamChange('prophet', 'seasonality_mode', e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="prophet-changepoint">Changepoint Prior Scale</Label>
+                        <Input 
+                          id="prophet-changepoint"
+                          type="number" 
+                          value={hyperparameters.prophet.changepoint_prior_scale} 
+                          onChange={(e) => handleHyperparamChange('prophet', 'changepoint_prior_scale', e.target.value)}
+                          min={0.001}
+                          max={0.5}
+                          step={0.001}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
 
       <div className="text-center pt-4">
@@ -323,6 +545,20 @@ export const ModelSelection = ({ dataset, onModelsConfigured, loading }: ModelSe
           {loading ? 'Training Models...' : 'Train Selected Models'}
         </Button>
       </div>
+      
+      {/* Information note about time series models */}
+      {hasTimeFeatures && (
+        <div className="bg-muted rounded-lg p-4 text-sm">
+          <h4 className="font-medium flex items-center">
+            <Clock className="w-4 h-4 mr-2" />
+            Time Series Features Detected
+          </h4>
+          <p className="mt-1">
+            Your dataset contains time-related columns. Advanced time series models (LSTM, ARIMA, Prophet) 
+            are now available and will take into account seasonality, trends and temporal patterns.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
