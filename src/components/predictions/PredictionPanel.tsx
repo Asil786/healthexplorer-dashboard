@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dataset, ModelConfig } from './MLPredictionSystem';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,36 +22,47 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
   const [prediction, setPrediction] = useState<{
     value: number;
     confidence: number;
+    detail?: string;
   } | null>(null);
-  
-  // Get feature columns (exclude target column)
-  const featureColumns = dataset.columns.filter(
-    col => col !== dataset.targetColumn
+
+  const timeFeature = dataset.columns.find(
+    col =>
+      col.toLowerCase().includes('year') ||
+      col.toLowerCase().includes('date') ||
+      col.toLowerCase().includes('time')
   );
-  
-  // Handle input change
+
+  const featureColumns = dataset.columns.filter(col => col !== dataset.targetColumn);
+
+  const activeFeatureColumns = timeFeature ? [timeFeature] : featureColumns;
+
   const handleInputChange = (column: string, value: string) => {
     setInputValues({
       ...inputValues,
       [column]: value,
     });
   };
-  
-  // Handle prediction
+
   const handlePredict = () => {
-    // Convert string values to numbers where possible
     const numericInputs: Record<string, any> = {};
     for (const [key, value] of Object.entries(inputValues)) {
       numericInputs[key] = isNaN(Number(value)) ? value : Number(value);
     }
-    
+
+    let detail = "";
+    if (timeFeature && dataset.targetColumn) {
+      detail = `Predicted value for ${dataset.targetColumn} in ${inputValues[timeFeature]}`;
+    } else if (dataset.targetColumn) {
+      detail = `Predicted ${dataset.targetColumn}`;
+    }
     const result = onPredict(numericInputs, selectedModel);
     setPrediction({
       value: result.predictedValue,
       confidence: result.confidence,
+      detail,
     });
   };
-  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card className="col-span-1">
@@ -76,11 +86,15 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-4 pt-2">
-              <h3 className="text-sm font-medium">Enter Feature Values</h3>
-              
-              {featureColumns.map(column => (
+              <h3 className="text-sm font-medium">
+                {activeFeatureColumns.length === 1
+                  ? `Enter ${activeFeatureColumns[0]}`
+                  : "Enter Feature Values"}
+              </h3>
+
+              {activeFeatureColumns.map(column => (
                 <div key={column}>
                   <Label htmlFor={`input-${column}`}>{column}</Label>
                   <Input
@@ -92,18 +106,18 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
                 </div>
               ))}
             </div>
-            
-            <Button 
-              onClick={handlePredict} 
+
+            <Button
+              onClick={handlePredict}
               className="w-full mt-4"
-              disabled={featureColumns.some(col => !inputValues[col])}
+              disabled={activeFeatureColumns.some(col => !inputValues[col])}
             >
               Predict <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </CardContent>
       </Card>
-      
+
       <Card className="col-span-1">
         <CardHeader>
           <CardTitle>Prediction Results</CardTitle>
@@ -112,7 +126,9 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
           {prediction ? (
             <div className="space-y-6">
               <div className="text-center p-6 border rounded-lg bg-muted/50">
-                <h3 className="text-lg font-medium mb-2">Predicted {dataset.targetColumn}</h3>
+                <h3 className="text-lg font-medium mb-2">
+                  {prediction.detail || `Predicted ${dataset.targetColumn}`}
+                </h3>
                 <div className="text-4xl font-bold text-primary">
                   {prediction.value.toFixed(2)}
                 </div>

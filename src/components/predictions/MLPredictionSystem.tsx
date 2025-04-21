@@ -55,12 +55,8 @@ export const MLPredictionSystem = () => {
     setModels(selectedModels);
     setLoading(true);
     
-    // Simulate model training - in a real app, this would call a backend service
     setTimeout(() => {
-      // More realistic model training using the full dataset
       const mockResults: ModelResult[] = selectedModels.map(model => {
-        // We're simulating different model performances based on model type
-        // In a real application, this would involve actual model training on the dataset
         let baseAccuracy = 0;
         let baseR2 = 0;
         
@@ -90,29 +86,23 @@ export const MLPredictionSystem = () => {
             baseR2 = 0.6;
         }
         
-        // Add some randomness to the metrics but keep them realistic
         const variance = 0.05;
         const accuracy = baseAccuracy + (Math.random() * variance * 2 - variance);
         const r2 = baseR2 + (Math.random() * variance * 2 - variance);
         
-        // Generate mock predictions for a sample of the dataset (for visualization)
         const predictions = dataset?.data.slice(0, 20).map(row => {
           const actual = row[dataset.targetColumn!];
-          // Simulate predictions with some error margin
           const predicted = actual * (1 + (Math.random() * 0.2 - 0.1));
           return { actual, predicted };
         }) || [];
         
-        // Simulate feature importance based on the dataset columns
         const featureImportance = dataset?.columns.reduce((acc, col) => {
           if (col !== dataset.targetColumn) {
-            // More realistic feature importance that differs by model
-            acc[col] = Math.random() * 0.5 + 0.1; // Values between 0.1 and 0.6
+            acc[col] = Math.random() * 0.5 + 0.1;
           }
           return acc;
         }, {} as Record<string, number>);
         
-        // Normalize feature importance so they sum to 1
         if (featureImportance) {
           const totalImportance = Object.values(featureImportance).reduce((sum, val) => sum + val, 0);
           Object.keys(featureImportance).forEach(key => {
@@ -123,8 +113,8 @@ export const MLPredictionSystem = () => {
         return {
           model,
           metrics: {
-            rmse: Math.sqrt(1 - r2) * 10, // Derive RMSE from R2 for consistency
-            mae: Math.sqrt(1 - r2) * 7,   // Derive MAE from R2 for consistency
+            rmse: Math.sqrt(1 - r2) * 10,
+            mae: Math.sqrt(1 - r2) * 7,
             r2,
             accuracy,
           },
@@ -143,88 +133,91 @@ export const MLPredictionSystem = () => {
     }, 2000);
   };
 
+  function simpleLinearRegression(xVals: number[], yVals: number[]) {
+    const n = xVals.length;
+    const avgX = xVals.reduce((s, x) => s + x, 0) / n;
+    const avgY = yVals.reduce((s, y) => s + y, 0) / n;
+    const num = xVals.reduce((acc, x, i) => acc + (x - avgX) * (yVals[i] - avgY), 0);
+    const den = xVals.reduce((acc, x) => acc + (x - avgX) ** 2, 0);
+    const b = den !== 0 ? num / den : 0;
+    const a = avgY - b * avgX;
+    return { a, b };
+  }
+
   const generatePrediction = (inputValues: Record<string, any>, modelType: string) => {
-    // Get the selected model result
     const modelResult = results.find(r => r.model.type === modelType);
-    
     if (!modelResult || !dataset?.targetColumn) {
-      return {
-        predictedValue: 0,
-        confidence: 0,
-      };
+      return { predictedValue: 0, confidence: 0 };
     }
-    
-    // In a real application, this would use the trained model to make a prediction
-    // Here we're simulating a prediction by:
-    // 1. Finding similar data points in our dataset
-    // 2. Calculating a weighted average based on model accuracy
-    
     const targetCol = dataset.targetColumn;
+
+    const timeFeature = dataset.columns.find(
+      col =>
+        col.toLowerCase().includes('year') ||
+        col.toLowerCase().includes('date') ||
+        col.toLowerCase().includes('time')
+    );
+
+    if (timeFeature && inputValues[timeFeature] !== undefined) {
+      const numericData = dataset.data.filter(
+        row =>
+          typeof row[timeFeature] === 'number' &&
+          typeof row[targetCol] === 'number'
+      );
+      if (numericData.length >= 2) {
+        const xVals = numericData.map(row => row[timeFeature]);
+        const yVals = numericData.map(row => row[targetCol]);
+        const { a, b } = simpleLinearRegression(xVals, yVals);
+        const xPred = Number(inputValues[timeFeature]);
+        const predictedValue = a + b * xPred;
+        let similarity = 1;
+        if (xPred < Math.min(...xVals) || xPred > Math.max(...xVals)) {
+          const delta = Math.min(Math.abs(xPred - Math.min(...xVals)), Math.abs(xPred - Math.max(...xVals)));
+          similarity = Math.exp(-delta / (Math.max(...xVals) - Math.min(...xVals) + 0.001));
+        }
+        const modelAccuracy = modelResult.metrics.accuracy || modelResult.metrics.r2;
+        return {
+          predictedValue,
+          confidence: modelAccuracy * similarity,
+        };
+      }
+    }
+
     const featureCols = dataset.columns.filter(col => col !== targetCol);
-    
-    // Find the 5 most similar data points (extremely simplified)
     const dataWithSimilarity = dataset.data.map(dataPoint => {
-      // Calculate a basic similarity score
       let similarityScore = 0;
       let featuresCompared = 0;
-      
       featureCols.forEach(col => {
         if (inputValues[col] !== undefined && dataPoint[col] !== undefined) {
-          // Only compare features that exist in both
           featuresCompared++;
-          // Calculate difference (normalized for numeric values)
           const inputVal = typeof inputValues[col] === 'number' ? inputValues[col] : 0;
           const dataVal = typeof dataPoint[col] === 'number' ? dataPoint[col] : 0;
-          
           if (typeof inputVal === 'number' && typeof dataVal === 'number') {
-            // For numerical features - use relative difference
             const maxVal = Math.max(...dataset.data.map(d => d[col] || 0));
             const minVal = Math.min(...dataset.data.map(d => d[col] || 0));
-            const range = maxVal - minVal || 1; // Avoid division by zero
-            
+            const range = maxVal - minVal || 1;
             const normalizedDiff = Math.abs(inputVal - dataVal) / range;
             similarityScore += (1 - normalizedDiff);
           } else {
-            // For categorical features - exact match only
             similarityScore += inputVal === dataVal ? 1 : 0;
           }
         }
       });
-      
-      // Average similarity across compared features
       similarityScore = featuresCompared > 0 ? similarityScore / featuresCompared : 0;
-      
-      return {
-        point: dataPoint,
-        similarity: similarityScore
-      };
+      return { point: dataPoint, similarity: similarityScore };
     });
-    
-    // Sort by similarity (highest first)
     dataWithSimilarity.sort((a, b) => b.similarity - a.similarity);
-    
-    // Take top 5 most similar points
     const topSimilar = dataWithSimilarity.slice(0, 5);
-    
     if (topSimilar.length === 0) {
-      return {
-        predictedValue: 0,
-        confidence: 0,
-      };
+      return { predictedValue: 0, confidence: 0 };
     }
-    
-    // Calculate weighted average of target values
     const weightedSum = topSimilar.reduce((sum, item) => sum + (item.point[targetCol] * item.similarity), 0);
     const sumOfWeights = topSimilar.reduce((sum, item) => sum + item.similarity, 0);
-    
-    // Final prediction
     const predictedValue = sumOfWeights > 0 ? weightedSum / sumOfWeights : 0;
-    
-    // Confidence based on model accuracy and similarity of data points
     const avgSimilarity = sumOfWeights / topSimilar.length;
     const modelAccuracy = modelResult.metrics.accuracy || modelResult.metrics.r2;
     const confidence = modelAccuracy * avgSimilarity;
-    
+
     return {
       predictedValue,
       confidence,
