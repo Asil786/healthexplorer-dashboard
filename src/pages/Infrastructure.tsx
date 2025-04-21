@@ -8,159 +8,59 @@ import {
   HardDrive, 
   Cpu, 
   Gauge, 
-  ServerCrash, 
-  Shield, 
-  Clock, 
-  BarChart, 
-  Layers,
-  Zap,
-  Activity,
   HardDriveDownload,
   ArrowUpDown,
+  Zap,
+  Activity,
+  CircleDot,
   RefreshCw,
-  CircleDot
+  Layers
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, BarChart as RechartsBarChart, Bar, Legend, Cell } from 'recharts';
 
 const serverMetrics = [
-  { timestamp: '00:00', cpu: 45, memory: 38, network: 20, disk: 15 },
-  { timestamp: '01:00', cpu: 42, memory: 39, network: 22, disk: 15 },
-  { timestamp: '02:00', cpu: 40, memory: 40, network: 18, disk: 16 },
-  { timestamp: '03:00', cpu: 38, memory: 41, network: 15, disk: 16 },
-  { timestamp: '04:00', cpu: 35, memory: 42, network: 12, disk: 17 },
-  { timestamp: '05:00', cpu: 37, memory: 45, network: 14, disk: 17 },
-  { timestamp: '06:00', cpu: 45, memory: 48, network: 30, disk: 18 },
-  { timestamp: '07:00', cpu: 55, memory: 52, network: 45, disk: 19 },
-  { timestamp: '08:00', cpu: 65, memory: 55, network: 60, disk: 20 },
-  { timestamp: '09:00', cpu: 75, memory: 60, network: 75, disk: 22 },
-  { timestamp: '10:00', cpu: 80, memory: 65, network: 80, disk: 24 },
-  { timestamp: '11:00', cpu: 90, memory: 70, network: 85, disk: 26 },
-  { timestamp: '12:00', cpu: 85, memory: 75, network: 75, disk: 28 },
-  { timestamp: '13:00', cpu: 80, memory: 72, network: 65, disk: 30 },
-  { timestamp: '14:00', cpu: 75, memory: 70, network: 55, disk: 32 },
-  { timestamp: '15:00', cpu: 70, memory: 68, network: 40, disk: 34 },
-  { timestamp: '16:00', cpu: 65, memory: 65, network: 35, disk: 36 },
-  { timestamp: '17:00', cpu: 60, memory: 60, network: 30, disk: 38 },
-  { timestamp: '18:00', cpu: 55, memory: 58, network: 25, disk: 40 },
-  { timestamp: '19:00', cpu: 50, memory: 55, network: 20, disk: 42 },
-  { timestamp: '20:00', cpu: 48, memory: 50, network: 18, disk: 44 },
-  { timestamp: '21:00', cpu: 45, memory: 48, network: 15, disk: 45 },
-  { timestamp: '22:00', cpu: 42, memory: 45, network: 12, disk: 46 },
-  { timestamp: '23:00', cpu: 40, memory: 42, network: 10, disk: 47 }
+  { timestamp: '00:00', cpu: 12, memory: 28, network: 10, disk: 9 },
+  { timestamp: '06:00', cpu: 18, memory: 33, network: 13, disk: 10 },
+  { timestamp: '12:00', cpu: 20, memory: 35, network: 17, disk: 12 },
+  { timestamp: '18:00', cpu: 15, memory: 30, network: 16, disk: 11 },
+  { timestamp: '23:00', cpu: 16, memory: 31, network: 14, disk: 10 }
 ];
 
 const networkStats = [
-  { name: 'Inbound', value: 245.8, unit: 'GB' },
-  { name: 'Outbound', value: 198.6, unit: 'GB' },
-  { name: 'Packets', value: 1.87, unit: 'B' },
-  { name: 'Latency', value: 28, unit: 'ms' }
+  { name: 'Inbound', value: 1.2, unit: 'GB' },
+  { name: 'Outbound', value: 0.9, unit: 'GB' },
+  { name: 'Packets', value: 23000, unit: '' },
+  { name: 'Latency', value: 8, unit: 'ms' }
 ];
 
 const storageStats = [
-  { name: 'Total', value: 12, unit: 'TB', color: '#6366f1' },
-  { name: 'Used', value: 7.8, unit: 'TB', color: '#a855f7' },
-  { name: 'Available', value: 4.2, unit: 'TB', color: '#22c55e' }
+  { name: 'Total', value: 0.5, unit: 'TB', color: '#6366f1' },
+  { name: 'Used', value: 0.19, unit: 'TB', color: '#a855f7' },
+  { name: 'Available', value: 0.31, unit: 'TB', color: '#22c55e' }
 ];
 
 const serversList = [
   { 
     id: 1, 
-    name: 'Primary Model Server', 
-    ip: '10.128.0.10', 
-    status: 'online', 
-    uptime: '98.7%', 
-    location: 'East Region', 
-    cpu: 65, 
-    memory: 72, 
-    disk: 45 
-  },
-  { 
-    id: 2, 
-    name: 'Backup Model Server', 
-    ip: '10.128.0.11', 
-    status: 'online', 
-    uptime: '99.4%', 
-    location: 'West Region', 
-    cpu: 35, 
-    memory: 48, 
-    disk: 40 
-  },
-  { 
-    id: 3, 
-    name: 'Data Processing Node 1', 
-    ip: '10.128.0.12', 
-    status: 'online', 
-    uptime: '99.9%', 
-    location: 'East Region', 
-    cpu: 78, 
-    memory: 85, 
-    disk: 62 
-  },
-  { 
-    id: 4, 
-    name: 'Data Processing Node 2', 
-    ip: '10.128.0.13', 
-    status: 'online', 
-    uptime: '97.3%', 
-    location: 'Central Region', 
-    cpu: 82, 
-    memory: 79, 
-    disk: 55 
-  },
-  { 
-    id: 5, 
-    name: 'Security Gateway', 
-    ip: '10.128.0.14', 
+    name: 'Local Model Server', 
+    ip: '127.0.0.1', 
     status: 'online', 
     uptime: '100%', 
-    location: 'East Region', 
-    cpu: 42, 
-    memory: 38, 
-    disk: 30
-  },
-  { 
-    id: 6, 
-    name: 'Database Cluster', 
-    ip: '10.128.0.15', 
-    status: 'online', 
-    uptime: '99.2%', 
-    location: 'Central Region', 
-    cpu: 75, 
-    memory: 81, 
-    disk: 78 
-  },
-  { 
-    id: 7, 
-    name: 'API Gateway', 
-    ip: '10.128.0.16', 
-    status: 'online', 
-    uptime: '99.8%', 
-    location: 'West Region', 
-    cpu: 58, 
-    memory: 62, 
-    disk: 41 
-  },
-  { 
-    id: 8, 
-    name: 'Load Balancer', 
-    ip: '10.128.0.17', 
-    status: 'warning', 
-    uptime: '95.1%', 
-    location: 'East Region', 
-    cpu: 88, 
-    memory: 75, 
-    disk: 22 
+    location: 'On-premise', 
+    cpu: 17, 
+    memory: 32, 
+    disk: 10 
   }
 ];
 
 const bandwidthData = [
-  { name: 'Mon', inbound: 125, outbound: 95 },
-  { name: 'Tue', inbound: 132, outbound: 110 },
-  { name: 'Wed', inbound: 145, outbound: 122 },
-  { name: 'Thu', inbound: 138, outbound: 117 },
-  { name: 'Fri', inbound: 152, outbound: 135 },
-  { name: 'Sat', inbound: 110, outbound: 92 },
-  { name: 'Sun', inbound: 105, outbound: 85 }
+  { name: 'Mon', inbound: 2.1, outbound: 1.7 },
+  { name: 'Tue', inbound: 2.3, outbound: 1.8 },
+  { name: 'Wed', inbound: 2.0, outbound: 1.3 },
+  { name: 'Thu', inbound: 2.2, outbound: 1.6 },
+  { name: 'Fri', inbound: 2.4, outbound: 1.9 },
+  { name: 'Sat', inbound: 1.5, outbound: 1.1 },
+  { name: 'Sun', inbound: 1.2, outbound: 1.0 }
 ];
 
 const StorageUsageChart = () => (
@@ -170,7 +70,7 @@ const StorageUsageChart = () => (
         <HardDrive size={18} className="text-indigo-400" />
         Storage Allocation & Usage
       </CardTitle>
-      <CardDescription>Total storage capacity and current usage across all servers</CardDescription>
+      <CardDescription>Total storage capacity and current usage across your local server</CardDescription>
     </CardHeader>
     <CardContent>
       <div className="h-[300px]">
@@ -221,7 +121,7 @@ const BandwidthUsageChart = () => (
         <ArrowUpDown size={18} className="text-indigo-400" />
         Network Bandwidth
       </CardTitle>
-      <CardDescription>Inbound and outbound data transfer over the last week</CardDescription>
+      <CardDescription>Inbound and outbound data transfer (local only)</CardDescription>
     </CardHeader>
     <CardContent>
       <div className="h-[300px]">
@@ -268,7 +168,7 @@ const ResourceUsageChart = () => (
         <Gauge size={18} className="text-indigo-400" />
         System Resource Usage
       </CardTitle>
-      <CardDescription>24-hour history of CPU, memory and network utilization</CardDescription>
+      <CardDescription>Local server CPU, memory and network utilization</CardDescription>
     </CardHeader>
     <CardContent>
       <div className="h-[300px]">
@@ -325,7 +225,7 @@ const ServerStatusTable = () => {
               <Server size={18} className="text-indigo-400" />
               Server Status
             </CardTitle>
-            <CardDescription>Current status of all servers in the federation</CardDescription>
+            <CardDescription>Current status of your local server</CardDescription>
           </div>
           <Button variant="outline" size="sm" className="flex items-center gap-2">
             <RefreshCw size={14} />
@@ -395,7 +295,7 @@ const InfrastructurePage = () => {
   return (
     <DashboardLayout 
       title="Infrastructure" 
-      description="Monitor and manage your federated learning infrastructure"
+      description="Monitor your local federated learning server"
     >
       <Tabs 
         defaultValue="overview" 
@@ -565,7 +465,7 @@ const InfrastructurePage = () => {
                 <HardDrive size={18} className="text-indigo-400" />
                 Storage Distribution
               </CardTitle>
-              <CardDescription>Storage allocation across data types and servers</CardDescription>
+              <CardDescription>Storage allocation breakdown</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-80 flex items-center justify-center text-slate-400">
@@ -573,10 +473,9 @@ const InfrastructurePage = () => {
                   <div className="mb-4">
                     <HardDrive className="h-12 w-12 mx-auto text-slate-500" />
                   </div>
-                  <h3 className="text-lg font-medium text-slate-300">Detailed Storage View</h3>
+                  <h3 className="text-lg font-medium text-slate-300">Detailed Storage (Local Server)</h3>
                   <p className="max-w-md mx-auto mt-2">
-                    Detailed storage statistics and allocations would be displayed here, including data type distribution,
-                    storage growth trends, and capacity planning metrics.
+                    Detailed storage data and type breakdown can be implemented once more nodes are added to your system.
                   </p>
                 </div>
               </div>
@@ -592,7 +491,7 @@ const InfrastructurePage = () => {
                 <Activity size={18} className="text-indigo-400" />
                 Network Performance
               </CardTitle>
-              <CardDescription>Latency and throughput metrics for the federation</CardDescription>
+              <CardDescription>Latency and metrics for your single server</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-80 flex items-center justify-center text-slate-400">
@@ -600,10 +499,9 @@ const InfrastructurePage = () => {
                   <div className="mb-4">
                     <Activity className="h-12 w-12 mx-auto text-slate-500" />
                   </div>
-                  <h3 className="text-lg font-medium text-slate-300">Network Performance View</h3>
+                  <h3 className="text-lg font-medium text-slate-300">Network Performance (Local Setup)</h3>
                   <p className="max-w-md mx-auto mt-2">
-                    Detailed network performance metrics would be displayed here, including latency between nodes,
-                    packet loss statistics, and bandwidth utilization across the federation.
+                    More detailed metrics will be available as soon as a distributed/server cluster is set up.
                   </p>
                 </div>
               </div>
