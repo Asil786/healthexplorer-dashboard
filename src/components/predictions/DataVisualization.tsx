@@ -34,17 +34,30 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
     return typeof firstValue === 'number';
   });
   
-  // Calculate histogram data - Fixed the infinite recursion issue
-  const getHistogramData = (columnName: string) => {
-    if (!columnName) return [];
+  // Fix the histogram data calculation function
+  const calculateHistogramData = (columnName: string) => {
+    if (!columnName || !dataset.data.length) return [];
     
-    const values = dataset.data.map(row => row[columnName]).filter(val => val !== undefined);
+    // Extract all numeric values for the column
+    const values = dataset.data
+      .map(row => row[columnName])
+      .filter((val): val is number => typeof val === 'number' && !isNaN(val));
+    
+    if (values.length === 0) return [];
+    
     const min = Math.min(...values);
     const max = Math.max(...values);
     const range = max - min;
+    
+    // Handle edge case where all values are the same
+    if (range === 0) {
+      return [{ bin: min.toFixed(1), count: values.length, binStart: min, binEnd: min }];
+    }
+    
     const binCount = Math.min(10, Math.ceil(Math.sqrt(values.length)));
     const binWidth = range / binCount;
     
+    // Create the bins
     const bins = Array(binCount).fill(0).map((_, i) => ({
       bin: `${(min + i * binWidth).toFixed(1)}-${(min + (i + 1) * binWidth).toFixed(1)}`,
       count: 0,
@@ -52,20 +65,18 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
       binEnd: min + (i + 1) * binWidth,
     }));
     
+    // Count values in each bin
     values.forEach(value => {
-      const binIndex = Math.min(
-        binCount - 1, 
-        Math.floor((value - min) / binWidth)
-      );
+      const binIndex = Math.min(binCount - 1, Math.floor((value - min) / binWidth));
       bins[binIndex].count++;
     });
     
     return bins;
   };
   
-  // Use useMemo to calculate histogram data only when xAxis changes
+  // Use useMemo to calculate histogram data only when xAxis or dataset changes
   const histogramData = useMemo(() => {
-    return xAxis ? getHistogramData(xAxis) : [];
+    return xAxis ? calculateHistogramData(xAxis) : [];
   }, [xAxis, dataset]);
   
   // Scatter plot data
