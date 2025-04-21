@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Dataset, ModelConfig } from './MLPredictionSystem';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,45 +18,37 @@ interface PredictionPanelProps {
 }
 
 export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelProps) => {
-  const [selectedModel, setSelectedModel] = useState<string>(models[0]?.type || '');
-  const [inputValues, setInputValues] = useState<Record<string, string>>({});
-  const [prediction, setPrediction] = useState<{
-    value: number;
-    confidence: number;
-    detail?: string;
-  } | null>(null);
-
+  // Identify the main time-based feature or fallback to the first feature column (not target)
   const timeFeature = dataset.columns.find(
     col =>
       col.toLowerCase().includes('year') ||
       col.toLowerCase().includes('date') ||
       col.toLowerCase().includes('time')
   );
+  // Only use the time-feature or fallback to the first feature column
+  const fallbackFeature = dataset.columns.find(col => col !== dataset.targetColumn);
+  const mainFeature = timeFeature || fallbackFeature;
 
-  const featureColumns = dataset.columns.filter(col => col !== dataset.targetColumn);
-
-  const activeFeatureColumns = timeFeature ? [timeFeature] : featureColumns;
-
-  const handleInputChange = (column: string, value: string) => {
-    setInputValues({
-      ...inputValues,
-      [column]: value,
-    });
-  };
+  const [selectedModel, setSelectedModel] = useState<string>(models[0]?.type || '');
+  const [featureValue, setFeatureValue] = useState<string>('');
+  const [prediction, setPrediction] = useState<{
+    value: number;
+    confidence: number;
+    detail?: string;
+  } | null>(null);
 
   const handlePredict = () => {
-    const numericInputs: Record<string, any> = {};
-    for (const [key, value] of Object.entries(inputValues)) {
-      numericInputs[key] = isNaN(Number(value)) ? value : Number(value);
-    }
+    if (!mainFeature || !featureValue) return;
+    const inputObj: Record<string, any> = {};
+    inputObj[mainFeature] = isNaN(Number(featureValue)) ? featureValue : Number(featureValue);
 
-    let detail = "";
-    if (timeFeature && dataset.targetColumn) {
-      detail = `Predicted value for ${dataset.targetColumn} in ${inputValues[timeFeature]}`;
-    } else if (dataset.targetColumn) {
-      detail = `Predicted ${dataset.targetColumn}`;
+    let detail = '';
+    if (dataset.targetColumn) {
+      detail = timeFeature
+        ? `Predicted ${dataset.targetColumn} for ${mainFeature} "${featureValue}"`
+        : `Predicted ${dataset.targetColumn} for ${mainFeature} "${featureValue}"`;
     }
-    const result = onPredict(numericInputs, selectedModel);
+    const result = onPredict(inputObj, selectedModel);
     setPrediction({
       value: result.predictedValue,
       confidence: result.confidence,
@@ -86,31 +79,25 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="space-y-4 pt-2">
-              <h3 className="text-sm font-medium">
-                {activeFeatureColumns.length === 1
-                  ? `Enter ${activeFeatureColumns[0]}`
-                  : "Enter Feature Values"}
-              </h3>
-
-              {activeFeatureColumns.map(column => (
-                <div key={column}>
-                  <Label htmlFor={`input-${column}`}>{column}</Label>
-                  <Input
-                    id={`input-${column}`}
-                    placeholder={`Enter ${column}`}
-                    value={inputValues[column] || ''}
-                    onChange={(e) => handleInputChange(column, e.target.value)}
-                  />
-                </div>
-              ))}
-            </div>
+            {/* Only the main relevant feature */}
+            {mainFeature && (
+              <div className="space-y-2 pt-2">
+                <Label htmlFor={`input-${mainFeature}`}>
+                  {mainFeature}
+                </Label>
+                <Input
+                  id={`input-${mainFeature}`}
+                  placeholder={`Enter ${mainFeature}`}
+                  value={featureValue}
+                  onChange={e => setFeatureValue(e.target.value)}
+                />
+              </div>
+            )}
 
             <Button
               onClick={handlePredict}
               className="w-full mt-4"
-              disabled={activeFeatureColumns.some(col => !inputValues[col])}
+              disabled={!featureValue || !mainFeature}
             >
               Predict <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -158,7 +145,8 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
                   <LineChart className="h-8 w-8 text-purple-500 mb-2" />
                   <div className="text-sm font-medium">Features</div>
                   <div className="text-lg font-bold">
-                    {featureColumns.length}
+                    {/* Only show usable features count */}
+                    {mainFeature ? 1 : 0}
                   </div>
                 </div>
               </div>
@@ -166,7 +154,7 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
               <div className="bg-muted/30 p-4 rounded-lg">
                 <h4 className="text-sm font-medium mb-2">About this prediction</h4>
                 <p className="text-sm text-muted-foreground">
-                  This prediction was made using the {models.find(m => m.type === selectedModel)?.name} model. 
+                  This prediction was made using the {models.find(m => m.type === selectedModel)?.name} model.
                   The confidence score indicates the model's certainty in this prediction.
                 </p>
               </div>
@@ -176,7 +164,7 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
               <LineChart className="h-16 w-16 mb-4 text-muted" />
               <h3 className="text-lg font-medium mb-2">No Prediction Yet</h3>
               <p className="max-w-md">
-                Enter your feature values and click the Predict button to see results.
+                Enter the {mainFeature} and click Predict to see the result.
               </p>
             </div>
           )}
