@@ -34,11 +34,11 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
     return typeof firstValue === 'number';
   });
   
-  // Calculate histogram data
-  const getHistogramData = (column: string) => {
-    if (!column) return [];
+  // Calculate histogram data - Fixed the infinite recursion issue
+  const getHistogramData = (columnName: string) => {
+    if (!columnName) return [];
     
-    const values = dataset.data.map(row => row[column]).filter(val => val !== undefined);
+    const values = dataset.data.map(row => row[columnName]).filter(val => val !== undefined);
     const min = Math.min(...values);
     const max = Math.max(...values);
     const range = max - min;
@@ -86,6 +86,9 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
         y: row[yAxis],
       }));
   };
+  
+  // Get histogram data for the selected column - not calling the function recursively
+  const histogramData = xAxis ? getHistogramData(xAxis) : [];
   
   return (
     <div className="space-y-6">
@@ -150,7 +153,7 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
                 >
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
-                      data={getHistogramData(xAxis)}
+                      data={histogramData}
                       margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
