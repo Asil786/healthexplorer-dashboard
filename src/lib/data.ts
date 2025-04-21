@@ -1,9 +1,9 @@
 export const institutionsData = [
   {
     id: 1,
-    name: "General Hospital",
-    location: "New York, NY",
-    dataPoints: 125000,
+    name: "AIIMS Delhi",
+    location: "New Delhi, India",
+    dataPoints: 32000,
     status: "active",
     lastSync: "2023-10-15T14:30:25.000Z",
     accuracy: 0.92,
@@ -11,9 +11,9 @@ export const institutionsData = [
   },
   {
     id: 2,
-    name: "University Medical Center",
-    location: "Boston, MA",
-    dataPoints: 89000,
+    name: "CMC Vellore",
+    location: "Vellore, Tamil Nadu",
+    dataPoints: 19000,
     status: "active",
     lastSync: "2023-10-15T14:25:18.000Z",
     accuracy: 0.89,
@@ -21,9 +21,9 @@ export const institutionsData = [
   },
   {
     id: 3,
-    name: "Central Health Clinic",
-    location: "Chicago, IL",
-    dataPoints: 68400,
+    name: "PGIMER Chandigarh",
+    location: "Chandigarh, India",
+    dataPoints: 12000,
     status: "inactive",
     lastSync: "2023-10-15T14:15:02.000Z",
     accuracy: 0.78,
@@ -31,9 +31,9 @@ export const institutionsData = [
   },
   {
     id: 4,
-    name: "Pacific Research Institute",
-    location: "San Francisco, CA",
-    dataPoints: 113700,
+    name: "Tata Memorial Hospital",
+    location: "Mumbai, Maharashtra",
+    dataPoints: 25000,
     status: "active",
     lastSync: "2023-10-15T14:10:47.000Z",
     accuracy: 0.94,
@@ -41,9 +41,9 @@ export const institutionsData = [
   },
   {
     id: 5,
-    name: "Mountain View Health",
-    location: "Denver, CO",
-    dataPoints: 54600,
+    name: "Apollo Hospitals",
+    location: "Chennai, Tamil Nadu",
+    dataPoints: 14000,
     status: "active",
     lastSync: "2023-10-15T13:45:12.000Z",
     accuracy: 0.85,
@@ -51,9 +51,9 @@ export const institutionsData = [
   },
   {
     id: 6,
-    name: "Atlantic Research Center",
-    location: "Miami, FL",
-    dataPoints: 76300,
+    name: "NIMHANS Bengaluru",
+    location: "Bengaluru, Karnataka",
+    dataPoints: 11000,
     status: "active",
     lastSync: "2023-10-15T13:30:59.000Z",
     accuracy: 0.88,
@@ -61,9 +61,9 @@ export const institutionsData = [
   },
   {
     id: 7,
-    name: "Riverside Community Hospital",
-    location: "Los Angeles, CA",
-    dataPoints: 93200,
+    name: "SCTIMST Trivandrum",
+    location: "Trivandrum, Kerala",
+    dataPoints: 10000,
     status: "active",
     lastSync: "2023-10-15T13:15:35.000Z",
     accuracy: 0.90,
@@ -71,9 +71,9 @@ export const institutionsData = [
   },
   {
     id: 8,
-    name: "Northern Medical Research",
-    location: "Seattle, WA",
-    dataPoints: 67800,
+    name: "KEM Hospital",
+    location: "Pune, Maharashtra",
+    dataPoints: 8000,
     status: "inactive",
     lastSync: "2023-10-15T12:45:20.000Z",
     accuracy: 0.81,
@@ -81,9 +81,66 @@ export const institutionsData = [
   }
 ];
 
-// For compatibility with existing code
 export const institutions = institutionsData;
 
+// Reduce network and infrastructure to reflect a single local server
+export const networkData = {
+  nodes: [
+    { id: 1, name: "Local Federation Server", type: "server", connections: 8, dataProcessed: 121000 },
+    { id: 2, name: "AIIMS Delhi", type: "institution", connections: 3, dataProcessed: 32000 },
+    { id: 3, name: "CMC Vellore", type: "institution", connections: 2, dataProcessed: 19000 },
+    { id: 4, name: "PGIMER Chandigarh", type: "institution", connections: 1, dataProcessed: 12000 }
+    // Only a few major hospitals for local setup
+  ],
+  links: [
+    { source: 1, target: 2, strength: 0.9, dataFlow: 4000, value: 4000 },
+    { source: 1, target: 3, strength: 0.85, dataFlow: 2000, value: 2000 },
+    { source: 1, target: 4, strength: 0.75, dataFlow: 1000, value: 1000 }
+  ]
+};
+
+export const systemHealth = [
+  { timestamp: "2023-10-15 09:00", cpuUsage: 22, memoryUsage: 18, networkLatency: 4 },   // Reduced stats
+  { timestamp: "2023-10-15 12:00", cpuUsage: 28, memoryUsage: 22, networkLatency: 5 }
+];
+
+export const infrastructureData = {
+  serverStatus: [
+    { name: "Federated Learning Local Server", status: "operational", uptime: "99.95%", load: 16, region: "India-Central" }
+  ],
+  resourceUtilization: [
+    { timestamp: "2023-10-15 09:00", cpu: 22, memory: 18, storage: 30, network: 8 },
+    { timestamp: "2023-10-15 12:00", cpu: 28, memory: 22, storage: 30, network: 10 }
+  ],
+  storageUsage: [
+    { category: "Model Weights", size: 120, growth: 2.1 },
+    { category: "Training Data", size: 780, growth: 3.2 }
+  ],
+  securityEvents: [
+    { date: "2023-10-14", type: "Authentication", severity: "low", count: 1, status: "resolved" }
+  ]
+};
+
+// Update some analytics to reflect Indian institutions in summaries
+export const analyticsData = {
+  performanceMetrics: [
+    { date: "2023-09-15", accuracy: 0.82, precision: 0.84, recall: 0.80, f1Score: 0.82 },
+    { date: "2023-09-22", accuracy: 0.84, precision: 0.86, recall: 0.82, f1Score: 0.84 }
+  ],
+  computationalResources: [
+    { date: "2023-09-15", gpuHours: 24, cpuHours: 42, memory: 12 },
+    { date: "2023-09-22", gpuHours: 28, cpuHours: 56, memory: 14 }
+  ],
+  userActivity: [
+    { role: "Researchers", count: 12, activeUsers: 9, avgSessionTime: 20 },
+    { role: "Clinicians", count: 22, activeUsers: 16, avgSessionTime: 12 }
+  ],
+  institutionContributions: [
+    { name: "AIIMS Delhi", dataPoints: 32000, models: 1, accuracy: 0.92 },
+    { name: "CMC Vellore", dataPoints: 19000, models: 1, accuracy: 0.89 },
+    { name: "Tata Memorial Hospital", dataPoints: 25000, models: 1, accuracy: 0.94 }
+  ]
+};
 export const trainingProgress = [
   { epoch: 1, accuracy: 0.68, loss: 0.42, privacyBudget: 0.8, timestamp: "2023-09-01" },
   { epoch: 2, accuracy: 0.72, loss: 0.36, privacyBudget: 0.7, timestamp: "2023-09-02" },
@@ -196,38 +253,6 @@ export const dataDistribution = [
   { category: "Lab Results", count: 56300 }
 ];
 
-export const networkData = {
-  nodes: [
-    { id: 1, name: "Central Server", type: "server", connections: 8, dataProcessed: 350000 },
-    { id: 2, name: "General Hospital", type: "institution", connections: 3, dataProcessed: 125000 },
-    { id: 3, name: "University Medical", type: "institution", connections: 2, dataProcessed: 89000 },
-    { id: 4, name: "Central Health", type: "institution", connections: 1, dataProcessed: 68400 },
-    { id: 5, name: "Pacific Research", type: "institution", connections: 3, dataProcessed: 113700 },
-    { id: 6, name: "Mountain View", type: "institution", connections: 2, dataProcessed: 54600 },
-    { id: 7, name: "Atlantic Research", type: "institution", connections: 2, dataProcessed: 76300 },
-    { id: 8, name: "Riverside Community", type: "institution", connections: 2, dataProcessed: 93200 }
-  ],
-  links: [
-    { source: 1, target: 2, strength: 0.9, dataFlow: 8900, value: 8900 },
-    { source: 1, target: 3, strength: 0.85, dataFlow: 7600, value: 7600 },
-    { source: 1, target: 4, strength: 0.7, dataFlow: 5100, value: 5100 },
-    { source: 1, target: 5, strength: 0.88, dataFlow: 8500, value: 8500 },
-    { source: 1, target: 6, strength: 0.75, dataFlow: 6200, value: 6200 },
-    { source: 1, target: 7, strength: 0.8, dataFlow: 7100, value: 7100 },
-    { source: 1, target: 8, strength: 0.82, dataFlow: 7400, value: 7400 }
-  ]
-};
-
-export const systemHealth = [
-  { timestamp: "2023-10-15 09:00", cpuUsage: 42, memoryUsage: 38, networkLatency: 12 },
-  { timestamp: "2023-10-15 10:00", cpuUsage: 45, memoryUsage: 40, networkLatency: 14 },
-  { timestamp: "2023-10-15 11:00", cpuUsage: 48, memoryUsage: 42, networkLatency: 15 },
-  { timestamp: "2023-10-15 12:00", cpuUsage: 52, memoryUsage: 45, networkLatency: 18 },
-  { timestamp: "2023-10-15 13:00", cpuUsage: 47, memoryUsage: 43, networkLatency: 16 },
-  { timestamp: "2023-10-15 14:00", cpuUsage: 41, memoryUsage: 39, networkLatency: 13 },
-  { timestamp: "2023-10-15 15:00", cpuUsage: 38, memoryUsage: 36, networkLatency: 11 }
-];
-
 export const networkMetricsData = {
   packetLoss: [
     { timestamp: "00:00", value: 0.2 },
@@ -332,36 +357,6 @@ export const modelsData = [
   }
 ];
 
-export const analyticsData = {
-  performanceMetrics: [
-    { date: "2023-09-15", accuracy: 0.82, precision: 0.84, recall: 0.80, f1Score: 0.82 },
-    { date: "2023-09-22", accuracy: 0.84, precision: 0.86, recall: 0.82, f1Score: 0.84 },
-    { date: "2023-09-29", accuracy: 0.86, precision: 0.88, recall: 0.84, f1Score: 0.86 },
-    { date: "2023-10-06", accuracy: 0.88, precision: 0.89, recall: 0.87, f1Score: 0.88 },
-    { date: "2023-10-13", accuracy: 0.91, precision: 0.92, recall: 0.90, f1Score: 0.91 }
-  ],
-  computationalResources: [
-    { date: "2023-09-15", gpuHours: 124, cpuHours: 246, memory: 58 },
-    { date: "2023-09-22", gpuHours: 138, cpuHours: 264, memory: 62 },
-    { date: "2023-09-29", gpuHours: 156, cpuHours: 285, memory: 67 },
-    { date: "2023-10-06", gpuHours: 172, cpuHours: 312, memory: 71 },
-    { date: "2023-10-13", gpuHours: 185, cpuHours: 334, memory: 76 }
-  ],
-  userActivity: [
-    { role: "Researchers", count: 42, activeUsers: 38, avgSessionTime: 68 },
-    { role: "Clinicians", count: 156, activeUsers: 124, avgSessionTime: 32 },
-    { role: "Data Scientists", count: 28, activeUsers: 26, avgSessionTime: 85 },
-    { role: "Administrators", count: 14, activeUsers: 12, avgSessionTime: 45 }
-  ],
-  institutionContributions: [
-    { name: "General Hospital", dataPoints: 125000, models: 4, accuracy: 0.92 },
-    { name: "University Medical", dataPoints: 89000, models: 3, accuracy: 0.89 },
-    { name: "Pacific Research", dataPoints: 113700, models: 5, accuracy: 0.94 },
-    { name: "Riverside Community", dataPoints: 93200, models: 3, accuracy: 0.90 },
-    { name: "Mountain View", dataPoints: 54600, models: 2, accuracy: 0.85 }
-  ]
-};
-
 export const privacyData = {
   privacyScores: [
     { date: "2023-08-15", score: 0.78, threshold: 0.75 },
@@ -399,33 +394,17 @@ export const privacyData = {
 
 export const infrastructureData = {
   serverStatus: [
-    { name: "Primary Federation Server", status: "operational", uptime: "99.98%", load: 42, region: "US-East" },
-    { name: "Backup Federation Server", status: "standby", uptime: "99.99%", load: 5, region: "US-West" },
-    { name: "European Data Center", status: "operational", uptime: "99.95%", load: 38, region: "EU-Central" },
-    { name: "Asian Data Center", status: "operational", uptime: "99.92%", load: 36, region: "APAC-East" },
-    { name: "Research Compute Cluster", status: "maintenance", uptime: "98.74%", load: 0, region: "US-Central" }
+    { name: "Federated Learning Local Server", status: "operational", uptime: "99.95%", load: 16, region: "India-Central" }
   ],
   resourceUtilization: [
-    { timestamp: "2023-10-15 09:00", cpu: 42, memory: 38, storage: 56, network: 32 },
-    { timestamp: "2023-10-15 10:00", cpu: 45, memory: 41, storage: 56, network: 38 },
-    { timestamp: "2023-10-15 11:00", cpu: 51, memory: 46, storage: 57, network: 45 },
-    { timestamp: "2023-10-15 12:00", cpu: 62, memory: 52, storage: 57, network: 58 },
-    { timestamp: "2023-10-15 13:00", cpu: 58, memory: 49, storage: 58, network: 52 },
-    { timestamp: "2023-10-15 14:00", cpu: 47, memory: 44, storage: 58, network: 41 },
-    { timestamp: "2023-10-15 15:00", cpu: 38, memory: 36, storage: 58, network: 34 }
+    { timestamp: "2023-10-15 09:00", cpu: 22, memory: 18, storage: 30, network: 8 },
+    { timestamp: "2023-10-15 12:00", cpu: 28, memory: 22, storage: 30, network: 10 }
   ],
   storageUsage: [
-    { category: "Model Weights", size: 1250, growth: 3.2 },
-    { category: "Training Data", size: 4500, growth: 5.8 },
-    { category: "Validation Data", size: 850, growth: 2.1 },
-    { category: "System Logs", size: 320, growth: 6.4 },
-    { category: "Backup Archives", size: 2800, growth: 1.9 }
+    { category: "Model Weights", size: 120, growth: 2.1 },
+    { category: "Training Data", size: 780, growth: 3.2 }
   ],
   securityEvents: [
-    { date: "2023-10-14", type: "Authentication", severity: "low", count: 3, status: "resolved" },
-    { date: "2023-10-12", type: "Access Control", severity: "medium", count: 1, status: "resolved" },
-    { date: "2023-10-08", type: "Data Transfer", severity: "low", count: 2, status: "resolved" },
-    { date: "2023-10-01", type: "System Update", severity: "info", count: 4, status: "completed" },
-    { date: "2023-09-28", type: "Network Latency", severity: "medium", count: 1, status: "resolved" }
+    { date: "2023-10-14", type: "Authentication", severity: "low", count: 1, status: "resolved" }
   ]
 };
