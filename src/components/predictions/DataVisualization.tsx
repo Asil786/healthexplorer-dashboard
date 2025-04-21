@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Dataset } from './MLPredictionSystem';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -63,6 +63,11 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
     return bins;
   };
   
+  // Use useMemo to calculate histogram data only when xAxis changes
+  const histogramData = useMemo(() => {
+    return xAxis ? getHistogramData(xAxis) : [];
+  }, [xAxis, dataset]);
+  
   // Scatter plot data
   const getScatterData = () => {
     if (!xAxis || !yAxis) return [];
@@ -86,9 +91,6 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
         y: row[yAxis],
       }));
   };
-  
-  // Get histogram data for the selected column - not calling the function recursively
-  const histogramData = xAxis ? getHistogramData(xAxis) : [];
   
   return (
     <div className="space-y-6">
