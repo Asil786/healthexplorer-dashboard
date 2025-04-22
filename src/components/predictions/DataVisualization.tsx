@@ -25,21 +25,31 @@ interface DataVisualizationProps {
 }
 
 export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
-  const [xAxis, setXAxis] = useState<string>(dataset.columns[0] || '');
-  const [yAxis, setYAxis] = useState<string>(dataset.targetColumn || dataset.columns[1] || '');
-  
-  // Process data for visualizations
-  const numericalColumns = dataset.columns.filter(col => {
-    const firstValue = dataset.data[0]?.[col];
-    return typeof firstValue === 'number';
+  const [xAxis, setXAxis] = useState<string>(() => {
+    // Initialize to the first column or empty if no columns
+    return dataset.columns.length > 0 ? dataset.columns[0] : '';
   });
   
+  const [yAxis, setYAxis] = useState<string>(() => {
+    // Initialize to the target column or second column or first column if only one column
+    return dataset.targetColumn || 
+           (dataset.columns.length > 1 ? dataset.columns[1] : dataset.columns[0] || '');
+  });
+  
+  // Process data for visualizations
+  const numericalColumns = useMemo(() => {
+    return dataset.columns.filter(col => {
+      // Check if any values for this column are numbers
+      return dataset.data.some(row => typeof row[col] === 'number');
+    });
+  }, [dataset.columns, dataset.data]);
+  
   // Fix the histogram data calculation function
-  const calculateHistogramData = (columnName: string) => {
-    if (!columnName || !dataset.data.length) return [];
+  const calculateHistogramData = (columnName: string, data: any[]) => {
+    if (!columnName || !data || data.length === 0) return [];
     
     // Extract all numeric values for the column
-    const values = dataset.data
+    const values = data
       .map(row => row[columnName])
       .filter((val): val is number => typeof val === 'number' && !isNaN(val));
     
@@ -76,32 +86,44 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
   
   // Use useMemo to calculate histogram data only when xAxis or dataset changes
   const histogramData = useMemo(() => {
-    return xAxis ? calculateHistogramData(xAxis) : [];
-  }, [xAxis, dataset]);
+    return calculateHistogramData(xAxis, dataset.data);
+  }, [xAxis, dataset.data]);
   
   // Scatter plot data
-  const getScatterData = () => {
+  const scatterData = useMemo(() => {
     if (!xAxis || !yAxis) return [];
     
-    return dataset.data.map(row => ({
-      x: row[xAxis],
-      y: row[yAxis],
-    })).filter(point => point.x !== undefined && point.y !== undefined);
-  };
+    return dataset.data
+      .filter(row => 
+        row[xAxis] !== undefined && 
+        row[yAxis] !== undefined && 
+        typeof row[xAxis] === 'number' && 
+        typeof row[yAxis] === 'number'
+      )
+      .map(row => ({
+        x: row[xAxis],
+        y: row[yAxis],
+      }));
+  }, [xAxis, yAxis, dataset.data]);
   
   // Line chart data (for trend analysis)
-  const getLineChartData = () => {
+  const lineChartData = useMemo(() => {
     if (!xAxis || !yAxis) return [];
     
     // Sort by x-axis value for a proper line chart
     return [...dataset.data]
-      .filter(row => row[xAxis] !== undefined && row[yAxis] !== undefined)
+      .filter(row => 
+        row[xAxis] !== undefined && 
+        row[yAxis] !== undefined && 
+        typeof row[xAxis] === 'number' && 
+        typeof row[yAxis] === 'number'
+      )
       .sort((a, b) => a[xAxis] - b[xAxis])
       .map(row => ({
         x: row[xAxis],
         y: row[yAxis],
       }));
-  };
+  }, [xAxis, yAxis, dataset.data]);
   
   return (
     <div className="space-y-6">
@@ -153,39 +175,45 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
             
             <TabsContent value="histogram">
               <div className="h-80">
-                <ChartContainer
-                  config={{
-                    count: {
-                      label: "Count",
-                      theme: {
-                        light: "#3b82f6",
-                        dark: "#60a5fa",
-                      },
-                    }
-                  }}
-                >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      data={histogramData}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis 
-                        dataKey="bin" 
-                        angle={-45} 
-                        textAnchor="end" 
-                        height={60}
-                      />
-                      <YAxis />
-                      <Tooltip content={<ChartTooltipContent />} />
-                      <Bar 
-                        dataKey="count" 
-                        fill="var(--color-count)" 
-                        name="Count" 
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
+                {histogramData.length > 0 ? (
+                  <ChartContainer
+                    config={{
+                      count: {
+                        label: "Count",
+                        theme: {
+                          light: "#3b82f6",
+                          dark: "#60a5fa",
+                        },
+                      }
+                    }}
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={histogramData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="bin" 
+                          angle={-45} 
+                          textAnchor="end" 
+                          height={60}
+                        />
+                        <YAxis />
+                        <Tooltip content={<ChartTooltipContent />} />
+                        <Bar 
+                          dataKey="count" 
+                          fill="var(--color-count)" 
+                          name="Count" 
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                ) : (
+                  <div className="h-full flex items-center justify-center">
+                    <p className="text-muted-foreground">No numerical data available for histogram</p>
+                  </div>
+                )}
               </div>
               <p className="text-sm text-center mt-2 text-muted-foreground">
                 Distribution of {xAxis}
@@ -194,47 +222,53 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
             
             <TabsContent value="scatter">
               <div className="h-80">
-                <ChartContainer
-                  config={{
-                    data: {
-                      label: "Data Points",
-                      theme: {
-                        light: "#3b82f6",
-                        dark: "#60a5fa",
-                      },
-                    }
-                  }}
-                >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <ScatterChart
-                      margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis 
-                        type="number" 
-                        dataKey="x" 
-                        name={xAxis} 
-                        label={{ value: xAxis, position: 'bottom' }}
-                      />
-                      <YAxis 
-                        type="number" 
-                        dataKey="y" 
-                        name={yAxis}
-                        label={{ value: yAxis, angle: -90, position: 'left' }}
-                      />
-                      <ZAxis range={[50, 50]} />
-                      <Tooltip 
-                        cursor={{ strokeDasharray: '3 3' }}
-                        formatter={(value, name) => [value, name === 'x' ? xAxis : yAxis]}
-                      />
-                      <Scatter 
-                        name="Data" 
-                        data={getScatterData()} 
-                        fill="var(--color-data)" 
-                      />
-                    </ScatterChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
+                {scatterData.length > 0 ? (
+                  <ChartContainer
+                    config={{
+                      data: {
+                        label: "Data Points",
+                        theme: {
+                          light: "#3b82f6",
+                          dark: "#60a5fa",
+                        },
+                      }
+                    }}
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ScatterChart
+                        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          type="number" 
+                          dataKey="x" 
+                          name={xAxis} 
+                          label={{ value: xAxis, position: 'bottom' }}
+                        />
+                        <YAxis 
+                          type="number" 
+                          dataKey="y" 
+                          name={yAxis}
+                          label={{ value: yAxis, angle: -90, position: 'left' }}
+                        />
+                        <ZAxis range={[50, 50]} />
+                        <Tooltip 
+                          cursor={{ strokeDasharray: '3 3' }}
+                          formatter={(value, name) => [value, name === 'x' ? xAxis : yAxis]}
+                        />
+                        <Scatter 
+                          name="Data" 
+                          data={scatterData} 
+                          fill="var(--color-data)" 
+                        />
+                      </ScatterChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                ) : (
+                  <div className="h-full flex items-center justify-center">
+                    <p className="text-muted-foreground">No numerical data available for scatter plot</p>
+                  </div>
+                )}
               </div>
               <p className="text-sm text-center mt-2 text-muted-foreground">
                 Relationship between {xAxis} and {yAxis}
@@ -243,46 +277,52 @@ export const DataVisualization = ({ dataset }: DataVisualizationProps) => {
             
             <TabsContent value="trend">
               <div className="h-80">
-                <ChartContainer
-                  config={{
-                    value: {
-                      label: yAxis,
-                      theme: {
-                        light: "#3b82f6",
-                        dark: "#60a5fa",
-                      },
-                    }
-                  }}
-                >
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={getLineChartData()}
-                      margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis 
-                        dataKey="x" 
-                        name={xAxis}
-                        label={{ value: xAxis, position: 'bottom' }}
-                      />
-                      <YAxis 
-                        name={yAxis}
-                        label={{ value: yAxis, angle: -90, position: 'left' }}
-                      />
-                      <Tooltip 
-                        formatter={(value, name) => [value, name === 'y' ? yAxis : xAxis]}
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="y" 
-                        name={yAxis}
-                        stroke="var(--color-value)" 
-                        dot={{ r: 3 }}
-                        activeDot={{ r: 5 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
+                {lineChartData.length > 0 ? (
+                  <ChartContainer
+                    config={{
+                      value: {
+                        label: yAxis,
+                        theme: {
+                          light: "#3b82f6",
+                          dark: "#60a5fa",
+                        },
+                      }
+                    }}
+                  >
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart
+                        data={lineChartData}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="x" 
+                          name={xAxis}
+                          label={{ value: xAxis, position: 'bottom' }}
+                        />
+                        <YAxis 
+                          name={yAxis}
+                          label={{ value: yAxis, angle: -90, position: 'left' }}
+                        />
+                        <Tooltip 
+                          formatter={(value, name) => [value, name === 'y' ? yAxis : xAxis]}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="y" 
+                          name={yAxis}
+                          stroke="var(--color-value)" 
+                          dot={{ r: 3 }}
+                          activeDot={{ r: 5 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                ) : (
+                  <div className="h-full flex items-center justify-center">
+                    <p className="text-muted-foreground">No numerical data available for trend analysis</p>
+                  </div>
+                )}
               </div>
               <p className="text-sm text-center mt-2 text-muted-foreground">
                 Trend of {yAxis} with respect to {xAxis}

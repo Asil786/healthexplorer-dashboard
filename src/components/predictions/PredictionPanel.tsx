@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dataset, ModelConfig } from './MLPredictionSystem';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -42,7 +42,7 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
   // All features we'll use for prediction input
   const predictionFeatures = [...timeFeatures, ...nonTimeFeatures].slice(0, 5);
   
-  const [selectedModel, setSelectedModel] = useState<string>(models[0]?.type || '');
+  const [selectedModel, setSelectedModel] = useState<string>('');
   const [featureValues, setFeatureValues] = useState<Record<string, string>>({});
   const [prediction, setPrediction] = useState<{
     value: number;
@@ -50,6 +50,13 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
     featureImportance?: Record<string, number>;
     detail?: string;
   } | null>(null);
+
+  // Initialize selectedModel when models are loaded
+  useEffect(() => {
+    if (models && models.length > 0 && !selectedModel) {
+      setSelectedModel(models[0].type);
+    }
+  }, [models, selectedModel]);
 
   const handleFeatureValueChange = (feature: string, value: string) => {
     setFeatureValues(prev => ({
@@ -59,60 +66,75 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
   };
 
   const handlePredict = () => {
-    if (predictionFeatures.length === 0) {
-      toast({
-        title: "Prediction Error",
-        description: "No features available for prediction",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    // Convert input values to appropriate types
-    const inputObj: Record<string, any> = {};
-    
-    predictionFeatures.forEach(feature => {
-      const value = featureValues[feature];
-      if (value !== undefined && value !== '') {
-        // Convert to number if possible
-        inputObj[feature] = isNaN(Number(value)) ? value : Number(value);
+    try {
+      if (predictionFeatures.length === 0) {
+        toast({
+          title: "Prediction Error",
+          description: "No features available for prediction",
+          variant: "destructive"
+        });
+        return;
       }
-    });
-    
-    // Check if we have at least one feature value
-    if (Object.keys(inputObj).length === 0) {
-      toast({
-        title: "Missing Input",
-        description: "Please provide at least one feature value for prediction",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    let detail = '';
-    if (dataset.targetColumn) {
-      const mainFeature = Object.keys(inputObj)[0] || '';
-      detail = mainFeature ? 
-        `Predicted ${dataset.targetColumn} for ${mainFeature} "${featureValues[mainFeature]}"` :
-        `Predicted ${dataset.targetColumn}`;
       
-      if (Object.keys(inputObj).length > 1) {
-        detail += " with multiple features";
+      // Convert input values to appropriate types
+      const inputObj: Record<string, any> = {};
+      
+      predictionFeatures.forEach(feature => {
+        const value = featureValues[feature];
+        if (value !== undefined && value !== '') {
+          // Convert to number if possible
+          inputObj[feature] = isNaN(Number(value)) ? value : Number(value);
+        }
+      });
+      
+      // Check if we have at least one feature value
+      if (Object.keys(inputObj).length === 0) {
+        toast({
+          title: "Missing Input",
+          description: "Please provide at least one feature value for prediction",
+          variant: "destructive"
+        });
+        return;
       }
+
+      let detail = '';
+      if (dataset.targetColumn) {
+        const mainFeature = Object.keys(inputObj)[0] || '';
+        detail = mainFeature ? 
+          `Predicted ${dataset.targetColumn} for ${mainFeature} "${featureValues[mainFeature]}"` :
+          `Predicted ${dataset.targetColumn}`;
+        
+        if (Object.keys(inputObj).length > 1) {
+          detail += " with multiple features";
+        }
+      }
+      
+      const result = onPredict(inputObj, selectedModel);
+      
+      // Check if result is valid
+      if (result && typeof result.predictedValue === 'number') {
+        setPrediction({
+          value: result.predictedValue,
+          confidence: result.confidence,
+          featureImportance: result.featureImportance,
+          detail,
+        });
+        
+        toast({
+          title: "Prediction Generated",
+          description: `${selectedModel} model prediction complete`,
+        });
+      } else {
+        throw new Error("Invalid prediction result");
+      }
+    } catch (error) {
+      console.error("Prediction error:", error);
+      toast({
+        title: "Prediction Failed",
+        description: "An error occurred while generating the prediction",
+        variant: "destructive"
+      });
     }
-    
-    const result = onPredict(inputObj, selectedModel);
-    setPrediction({
-      value: result.predictedValue,
-      confidence: result.confidence,
-      featureImportance: result.featureImportance,
-      detail,
-    });
-    
-    toast({
-      title: "Prediction Generated",
-      description: `${selectedModel} model prediction complete`,
-    });
   };
 
   return (
@@ -199,7 +221,7 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
             <Button
               onClick={handlePredict}
               className="w-full mt-4"
-              disabled={Object.keys(featureValues).length === 0}
+              disabled={selectedModel === '' || Object.keys(featureValues).filter(k => featureValues[k] !== '').length === 0}
             >
               Predict <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -283,7 +305,7 @@ export const PredictionPanel = ({ dataset, models, onPredict }: PredictionPanelP
               <div className="bg-muted/30 p-4 rounded-lg">
                 <h4 className="text-sm font-medium mb-2">About this prediction</h4>
                 <p className="text-sm text-muted-foreground">
-                  This prediction was made using the {models.find(m => m.type === selectedModel)?.name} model.
+                  This prediction was made using the {models.find(m => m.type === selectedModel)?.name || selectedModel} model.
                   The confidence score indicates the model's certainty in this prediction based on time series analysis and feature engineering.
                 </p>
               </div>
