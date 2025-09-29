@@ -46,7 +46,6 @@ const LiveHealth = () => {
               className="w-full h-full"
             >
               <iframe 
-                {/* https://labs.heygen.com/interactive-avatar/share?share= */}
                 src="https://labs.heygen.com/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiJBbm5fRG9jdG9yX1NpdHRpbmdfcHVibGlj%0D%0AIiwicHJldmlld0ltZyI6Imh0dHBzOi8vZmlsZXMyLmhleWdlbi5haS9hdmF0YXIvdjMvMjZkZTM2%0D%0AOWIyZDQ0NDNlNTg2ZGVkZjI3YWYxZTBjMWRfNDU1NzAvcHJldmlld190YWxrXzEud2VicCIsIm5l%0D%0AZWRSZW1vdmVCYWNrZ3JvdW5kIjpmYWxzZSwia25vd2xlZGdlQmFzZUlkIjoiNmI2NDE1MzIzZDRh%0D%0ANGE2MTk4MDMyMTI5ZjI4OWI4NjgifQ%3D%3D&inIFrame=1"
                 allow="microphone"
                 onLoad={handleIframeLoad}
